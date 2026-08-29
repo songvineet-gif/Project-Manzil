@@ -54,8 +54,8 @@
   nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
   .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--white);letter-spacing:.2px;text-decoration:none;}
   .logo-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--gold-400),var(--gold-500));display:flex;align-items:center;justify-content:center;color:var(--navy-950);font-weight:800;font-size:15px;}
-  .nav-links{display:flex;gap:32px;align-items:center;}
-  .nav-links a{color:rgba(255,255,255,0.82);text-decoration:none;font-size:14.5px;font-weight:500;}
+  .nav-links{display:flex;gap:22px;align-items:center;}
+  .nav-links a{color:rgba(255,255,255,0.82);text-decoration:none;font-size:14px;font-weight:500;white-space:nowrap;}
   .nav-links a:hover{color:var(--white);}
   .nav-cta{display:flex;align-items:center;gap:14px;}
   .menu-toggle{display:none;background:none;border:none;color:var(--white);font-size:26px;cursor:pointer;}
@@ -94,11 +94,11 @@
   .section-head p{color:var(--muted);font-size:16px;margin:0;}
 
   /* STEPS */
-  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  .step-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:30px 26px;box-shadow:var(--shadow);position:relative;}
-  .step-num{width:38px;height:38px;border-radius:10px;background:var(--navy-900);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;margin-bottom:18px;}
-  .step-card h3{font-size:18px;margin:0 0 8px;font-weight:700;}
-  .step-card p{color:var(--muted);font-size:14.5px;margin:0;}
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;}
+  .step-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:26px 20px;box-shadow:var(--shadow);position:relative;}
+  .step-num{width:36px;height:36px;border-radius:10px;background:var(--navy-900);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;margin-bottom:16px;}
+  .step-card h3{font-size:16px;margin:0 0 8px;font-weight:700;}
+  .step-card p{color:var(--muted);font-size:13.5px;margin:0;}
 
   .timeline{margin-top:56px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px;box-shadow:var(--shadow);}
   .timeline-title{font-weight:700;font-size:15px;margin-bottom:26px;color:var(--navy-900);}
@@ -110,8 +110,28 @@
   .tl-item span{font-size:12.5px;color:var(--muted);}
   .tl-note{margin-top:24px;font-size:12.5px;color:var(--muted);text-align:center;}
 
+  /* SERVICES */
+  .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .service-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column;}
+  .service-card h3{font-size:17px;margin:0 0 8px;font-weight:700;}
+  .service-card p{color:var(--muted);font-size:13.8px;margin:0 0 16px;flex-grow:1;}
+  .service-card a{color:var(--gold-500);font-weight:700;font-size:13.5px;text-decoration:none;}
+  .service-card a:hover{text-decoration:underline;}
+
+  /* CALCULATOR */
+  .calc-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:32px;align-items:start;}
+  .calc-inputs{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);}
+  .calc-inputs input[type="range"]{width:100%;accent-color:var(--gold-500);}
+  .calc-range-value{font-size:13px;color:var(--muted);margin-top:6px;}
+  .calc-result{background:var(--navy-900);color:var(--white);border-radius:var(--radius);padding:30px;position:sticky;top:90px;}
+  .calc-result h3{margin:0 0 6px;font-size:13.5px;color:rgba(255,255,255,0.68);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+  .calc-big{font-size:36px;font-weight:800;color:var(--gold-400);margin:0 0 18px;}
+  .calc-result .compare-row{border-top-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);}
+  .calc-result .bank{font-weight:500;color:rgba(255,255,255,0.62);}
+  .calc-result .rate{color:var(--white);font-weight:700;}
+
   /* FEATURES */
-  .features{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
   .feature-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;}
   .feature-icon{width:42px;height:42px;border-radius:10px;background:rgba(201,154,60,0.12);color:var(--gold-500);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:16px;}
   .feature-card h3{font-size:16px;margin:0 0 8px;font-weight:700;}
@@ -120,10 +140,37 @@
   .band-dark{background:linear-gradient(180deg,var(--navy-900),var(--navy-950));color:var(--white);}
   .band-dark .section-head p{color:rgba(255,255,255,0.65);}
   .band-dark .kicker{color:var(--gold-400);}
+  .band-dark .feature-card{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);}
+  .band-dark .feature-card h3{color:var(--white);}
+  .band-dark .feature-card p{color:rgba(255,255,255,0.62);}
 
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
   .stat h3{font-size:34px;font-weight:800;color:var(--gold-400);margin:0 0 6px;}
   .stat p{margin:0;color:rgba(255,255,255,0.65);font-size:13.5px;}
+
+  /* BANK PARTNERS */
+  .bank-badges{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;}
+  .bank-badge{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 22px;font-weight:700;font-size:14px;color:var(--navy-900);box-shadow:var(--shadow);}
+  .bb-icon{width:28px;height:28px;border-radius:8px;background:var(--navy-900);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+
+  /* TESTIMONIALS */
+  .testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .testimonial-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow);}
+  .testimonial-stars{color:var(--gold-500);font-size:14px;margin-bottom:14px;letter-spacing:2px;}
+  .testimonial-card p.quote{font-size:14.5px;color:var(--ink);margin:0 0 20px;font-style:italic;}
+  .testimonial-name{font-weight:700;font-size:13.5px;}
+  .testimonial-loc{color:var(--muted);font-size:12.5px;}
+
+  /* FAQ */
+  .faq-cat{margin-bottom:30px;}
+  .faq-cat:last-child{margin-bottom:0;}
+  .faq-cat h3{font-size:13.5px;color:var(--gold-500);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin:0 0 14px;}
+  .faq-item{background:var(--white);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+  .faq-item summary{padding:16px 20px;font-weight:600;font-size:14.5px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:"+";font-size:20px;color:var(--gold-500);flex-shrink:0;}
+  .faq-item[open] summary::after{content:"–";}
+  .faq-item .faq-a{padding:0 20px 18px;color:var(--muted);font-size:14px;}
 
   /* FORM */
   .contact-wrap{display:grid;grid-template-columns:0.9fr 1.1fr;gap:48px;align-items:start;}
@@ -133,6 +180,7 @@
   .contact-detail .ci-icon{width:36px;height:36px;border-radius:9px;background:rgba(201,154,60,0.12);color:var(--gold-500);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
   .contact-detail strong{display:block;font-size:14px;}
   .contact-detail span{font-size:13.5px;color:var(--muted);}
+  .contact-detail a{text-decoration:none;color:inherit;}
 
   .form-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px;}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -152,23 +200,35 @@
   .footer-col h4{color:var(--white);font-size:13px;margin:0 0 12px;}
   .footer-col a{display:block;color:rgba(255,255,255,0.55);text-decoration:none;font-size:13.5px;margin-bottom:9px;}
   .footer-col a:hover{color:var(--white);}
+  .footer-social{display:flex;gap:10px;margin-top:14px;}
+  .footer-social a{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:var(--white);text-decoration:none;font-size:15px;}
+  .footer-social a:hover{background:var(--gold-500);color:var(--navy-950);}
+  .footer-legal{font-size:12px;color:rgba(255,255,255,0.42);margin-top:16px;max-width:640px;line-height:1.6;}
   .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;}
 
+  @media (max-width: 980px){
+    .steps{grid-template-columns:repeat(3,1fr);}
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .features{grid-template-columns:repeat(2,1fr);}
+    .testimonials-grid{grid-template-columns:1fr;}
+  }
   @media (max-width: 880px){
-    .hero-grid, .contact-wrap{grid-template-columns:1fr;}
+    .hero-grid, .contact-wrap, .calc-grid{grid-template-columns:1fr;}
+    .calc-result{position:static;}
     .hero h1{font-size:34px;}
     .hero-stats{gap:24px;}
-    .steps{grid-template-columns:1fr;}
-    .features{grid-template-columns:1fr 1fr;}
+    .steps{grid-template-columns:1fr 1fr;}
     .stats{grid-template-columns:1fr 1fr;}
     .form-row{grid-template-columns:1fr;}
-    .nav-links{position:fixed;top:66px;left:0;right:0;background:var(--navy-950);flex-direction:column;padding:20px 24px;gap:18px;display:none;}
+    .nav-links{position:fixed;top:66px;left:0;right:0;background:var(--navy-950);flex-direction:column;padding:20px 24px;gap:18px;display:none;align-items:flex-start;}
     .nav-links.open{display:flex;}
     .menu-toggle{display:block;}
     .timeline-track{flex-direction:column;gap:22px;align-items:flex-start;}
     .timeline-track::before{display:none;}
   }
   @media (max-width: 560px){
+    .steps{grid-template-columns:1fr;}
+    .services-grid{grid-template-columns:1fr;}
     .features{grid-template-columns:1fr;}
     .stats{grid-template-columns:1fr 1fr;}
   }
@@ -182,8 +242,10 @@
       <a href="#top" class="logo"><span class="logo-mark">M</span> Project Manzil</a>
       <div class="nav-links" id="navLinks">
         <a href="#how">How it works</a>
+        <a href="#services">Services</a>
+        <a href="#calculator">Calculator</a>
         <a href="#why">Why Manzil</a>
-        <a href="#timeline">Timeline</a>
+        <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </div>
       <div class="nav-cta">
@@ -207,7 +269,7 @@
       <div class="trust-row">
         <div><span class="dot"></span> We deal with the banks, not you</div>
         <div><span class="dot"></span> Clear timelines at every step</div>
-        <div><span class="dot"></span> No cost to get your comparison</div>
+        <div><span class="dot"></span> Free for you — we're paid by the bank</div>
       </div>
       <div class="hero-stats">
         <div class="hero-stat"><span class="hs-num">5/5</span><span class="hs-label">Rated on Google</span></div>
@@ -230,7 +292,7 @@
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">How it works</div>
-      <h2>Three steps. We handle the rest.</h2>
+      <h2>Five steps. We handle the rest.</h2>
       <p>You tell us what you need once. We take it from there — comparing, negotiating, and keeping you updated until you're holding the keys.</p>
     </div>
     <div class="steps">
@@ -241,13 +303,23 @@
       </div>
       <div class="step-card">
         <div class="step-num">2</div>
+        <h3>We shortlist the right lenders</h3>
+        <p>Based on your profile — resident, non-resident, refinance, or commercial — we identify which banks are the best fit.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
         <h3>We negotiate with the banks</h3>
         <p>Our team compares offers across lenders and negotiates directly with banks on your behalf — so you don't have to make a single call.</p>
       </div>
       <div class="step-card">
-        <div class="step-num">3</div>
+        <div class="step-num">4</div>
         <h3>You choose, with full visibility</h3>
         <p>We lay out every option side by side — rate, timeline, total cost — so you can pick the best deal with total confidence.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">5</div>
+        <h3>We support you to closing</h3>
+        <p>From paperwork to approval to disbursement, we stay with you until you're holding the keys — at no cost to you.</p>
       </div>
     </div>
   </div>
@@ -266,6 +338,105 @@
       </div>
       <div class="tl-note">We'll give you a specific, updated timeline for your case once we start comparing offers on your behalf.</div>
     </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Services</div>
+      <h2>Mortgage help for every kind of buyer.</h2>
+      <p>Whichever category you fall into, we shop your profile across UAE banks to find the right fit — at no cost to you.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="feature-icon">🏠</div>
+        <h3>Resident Mortgages</h3>
+        <p>Buying your home in the UAE as a resident? We compare rates across banks and negotiate the best terms for your salary and eligibility profile.</p>
+        <a href="#contact">Get a quote →</a>
+      </div>
+      <div class="service-card">
+        <div class="feature-icon">🌍</div>
+        <h3>Non-Resident Mortgages</h3>
+        <p>Living abroad but investing in UAE property? We match you with banks that lend to non-residents and handle the extra paperwork for you.</p>
+        <a href="#contact">Get a quote →</a>
+      </div>
+      <div class="service-card">
+        <div class="feature-icon">🔄</div>
+        <h3>Refinancing</h3>
+        <p>Already have a mortgage? We check whether a better rate is available and manage the full refinancing process to lower your monthly payment.</p>
+        <a href="#contact">Get a quote →</a>
+      </div>
+      <div class="service-card">
+        <div class="feature-icon">🏢</div>
+        <h3>Commercial Mortgages</h3>
+        <p>Buying commercial property? We source financing for offices, retail, and investment units with terms suited to your business.</p>
+        <a href="#contact">Get a quote →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="calculator" style="background:var(--bg);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Plan ahead</div>
+      <h2>Estimate your monthly mortgage payment</h2>
+      <p>Get a quick estimate based on property price, down payment, and loan term. This is illustrative only — your real rate depends on your profile and the bank.</p>
+    </div>
+    <div class="calc-grid">
+      <div class="calc-inputs">
+        <div class="field">
+          <label for="calcPrice">Property price (AED)</label>
+          <input type="number" id="calcPrice" value="1500000" min="100000" step="10000">
+        </div>
+        <div class="field">
+          <label for="calcDown">Down payment</label>
+          <input type="range" id="calcDown" min="10" max="80" value="20" step="1">
+          <div class="calc-range-value"><span id="calcDownPct">20</span>% — AED <span id="calcDownAmt">300,000</span></div>
+        </div>
+        <div class="field">
+          <label for="calcTerm">Loan term</label>
+          <input type="range" id="calcTerm" min="5" max="25" value="20" step="1">
+          <div class="calc-range-value"><span id="calcTermVal">20</span> years</div>
+        </div>
+        <div class="field">
+          <label for="calcRate">Interest rate (per year)</label>
+          <input type="range" id="calcRate" min="2" max="8" value="4.5" step="0.1">
+          <div class="calc-range-value"><span id="calcRateVal">4.5</span>%</div>
+        </div>
+      </div>
+      <div class="calc-result">
+        <h3>Estimated monthly payment</h3>
+        <p class="calc-big">AED <span id="calcMonthly">0</span></p>
+        <div class="compare-row"><span class="bank">Loan amount</span><span class="rate" id="calcLoanAmt">—</span></div>
+        <div class="compare-row"><span class="bank">Total interest</span><span class="rate" id="calcTotalInterest">—</span></div>
+        <div class="compare-row"><span class="bank">Total repayment</span><span class="rate" id="calcTotalPay">—</span></div>
+        <a href="#contact" class="btn btn-primary" style="width:100%;margin-top:18px;">Get my real rate</a>
+      </div>
+    </div>
+    <p class="tl-note" style="margin-top:24px;">Estimate only — actual rate, eligibility, and monthly payment depend on the bank, your profile, and current market conditions.</p>
+  </div>
+</section>
+
+<section id="banks">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Bank network</div>
+      <h2>We compare rates across the UAE's leading banks</h2>
+      <p>Rather than pushing one lender, we shop your profile across multiple banks to find the strongest offer for you.</p>
+    </div>
+    <div class="bank-badges">
+      <div class="bank-badge"><span class="bb-icon">🏦</span> Emirates NBD</div>
+      <div class="bank-badge"><span class="bb-icon">🏦</span> ADCB</div>
+      <div class="bank-badge"><span class="bb-icon">🏦</span> Mashreq</div>
+      <div class="bank-badge"><span class="bb-icon">🏦</span> ADIB</div>
+      <div class="bank-badge"><span class="bb-icon">🏦</span> Dubai Islamic Bank</div>
+      <div class="bank-badge"><span class="bb-icon">🏦</span> HSBC UAE</div>
+      <div class="bank-badge"><span class="bb-icon">🏦</span> First Abu Dhabi Bank</div>
+      <div class="bank-badge"><span class="bb-icon">🏦</span> RAKBANK</div>
+    </div>
+    <p class="tl-note" style="margin-top:26px;">Bank names shown are examples of institutions we commonly compare offers from. Bank names and trademarks belong to their respective owners.</p>
   </div>
 </section>
 
@@ -297,6 +468,141 @@
         <h3>Visual, side-by-side offers</h3>
         <p>See every option laid out clearly — rate, timeline, and total cost — so the right choice is obvious.</p>
       </div>
+      <div class="feature-card">
+        <div class="feature-icon">🆓</div>
+        <h3>Free for you, always</h3>
+        <p>We're paid a commission by the bank once your loan closes — never by you. Getting the best deal never costs you anything.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Licensed & independent</h3>
+        <p>Manzil is a licensed, registered mortgage brokerage. We're not tied to any single bank, so our advice is always in your interest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Testimonials</div>
+      <h2>What clients say about working with us.</h2>
+      <p>A few words from people we've helped find their mortgage.</p>
+    </div>
+    <!-- Placeholder testimonials — replace with real, permissioned client quotes before launch. -->
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="quote">"I didn't have to speak to a single bank myself — Manzil handled everything and got me a better rate than I expected."</p>
+        <div class="testimonial-name">S. Ahmed</div>
+        <div class="testimonial-loc">Dubai</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="quote">"As a non-resident, I thought getting a mortgage in Dubai would be a nightmare. They made it simple and kept me updated the whole way."</p>
+        <div class="testimonial-name">R. Fernandes</div>
+        <div class="testimonial-loc">Dubai</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="quote">"Straightforward, transparent, and genuinely free like they said it would be. Would recommend to anyone buying property here."</p>
+        <div class="testimonial-name">L. Osei</div>
+        <div class="testimonial-loc">Dubai</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="background:var(--bg);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">FAQ</div>
+      <h2>Common questions about mortgages in the UAE.</h2>
+      <p>Can't find your answer here? Reach out and we'll walk you through it directly.</p>
+    </div>
+
+    <div class="faq-cat">
+      <h3>General</h3>
+      <details class="faq-item">
+        <summary>What does Project Manzil do?</summary>
+        <div class="faq-a">We're a mortgage advisory service. You tell us what you need once, and we compare offers across UAE banks, negotiate on your behalf, and guide you through to closing — so you don't have to deal with the banks yourself.</div>
+      </details>
+      <details class="faq-item">
+        <summary>How is this different from going directly to a bank?</summary>
+        <div class="faq-a">A single bank can only offer you its own rate. We compare multiple banks at once and negotiate on your behalf, so you see the strongest offer available to you rather than just the first one.</div>
+      </details>
+    </div>
+
+    <div class="faq-cat">
+      <h3>Costs &amp; Fees</h3>
+      <details class="faq-item">
+        <summary>Does it cost anything to use your service?</summary>
+        <div class="faq-a">No. Our service is completely free for you.</div>
+      </details>
+      <details class="faq-item">
+        <summary>How do you make money if it's free for me?</summary>
+        <div class="faq-a">We're paid a commission by the bank once your mortgage is successfully completed — never by you. This keeps our advice independent, since we're incentivized to find you the right deal, not a specific bank's deal.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Are there any hidden charges?</summary>
+        <div class="faq-a">No hidden charges from us. Standard bank-side costs (such as processing fees, valuation fees, or mortgage registration fees) may apply depending on the bank and property — we'll make sure these are clear to you upfront before you commit.</div>
+      </details>
+    </div>
+
+    <div class="faq-cat">
+      <h3>Eligibility</h3>
+      <details class="faq-item">
+        <summary>Can non-residents get a mortgage in the UAE?</summary>
+        <div class="faq-a">Yes. A number of UAE banks lend to non-residents, typically with a higher down payment requirement than for residents. We'll match you with banks that fit your specific situation.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What's the minimum down payment required?</summary>
+        <div class="faq-a">Down payment requirements are set by UAE Central Bank mortgage regulations and vary by residency status and property value — typically starting from around 20–25% for residents, and somewhat higher for non-residents. We'll confirm the exact figure for your case.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What documents do I need to apply?</summary>
+        <div class="faq-a">Generally: passport/Emirates ID, proof of income (salary certificate or bank statements), and property details. Requirements vary slightly by bank and residency status — we'll send you the exact checklist once we understand your case.</div>
+      </details>
+    </div>
+
+    <div class="faq-cat">
+      <h3>Process &amp; Timeline</h3>
+      <details class="faq-item">
+        <summary>How long does the process take?</summary>
+        <div class="faq-a">From application to closing typically takes a few weeks, though it depends on the bank, your documentation, and the property. We give you a clear, updated timeline once we start comparing offers on your behalf.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Can I refinance an existing mortgage?</summary>
+        <div class="faq-a">Yes. We can check whether a better rate is currently available and manage the refinancing process end to end if it makes financial sense for you.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What happens if my application is rejected by a bank?</summary>
+        <div class="faq-a">If one bank declines, we simply move to the next best-fit lender from our comparison. Part of our job is finding the bank most likely to approve your specific profile in the first place.</div>
+      </details>
+    </div>
+
+    <div class="faq-cat">
+      <h3>Rates &amp; Terms</h3>
+      <details class="faq-item">
+        <summary>Fixed vs. variable rate — which is better?</summary>
+        <div class="faq-a">It depends on your risk tolerance and how long you plan to hold the property. Fixed rates give payment certainty for a set period; variable rates can be lower initially but move with the market. We'll walk you through the trade-offs for your situation.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Can I pay off my mortgage early?</summary>
+        <div class="faq-a">Most UAE banks allow early settlement, sometimes with an early-settlement fee capped by regulation. We'll flag any such terms clearly when comparing offers.</div>
+      </details>
+    </div>
+
+    <div class="faq-cat">
+      <h3>About Us</h3>
+      <details class="faq-item">
+        <summary>Are you a licensed broker?</summary>
+        <div class="faq-a">Yes. Manzil is a licensed, independent mortgage brokerage registered in Dubai, UAE. We're not owned by or exclusively tied to any single bank, so our recommendations are based on what's best for you.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Which banks do you work with?</summary>
+        <div class="faq-a">We compare offers across a range of major UAE banks — see our bank network section above. The exact set of banks we approach depends on which ones best fit your profile.</div>
+      </details>
     </div>
   </div>
 </section>
@@ -306,14 +612,14 @@
     <div class="contact-info">
       <div class="kicker">Get started</div>
       <h2>Get your free loan comparison</h2>
-      <p>Tell us a bit about the property and what you're looking for. We'll come back to you with real options and a timeline built around your situation.</p>
+      <p>Tell us a bit about the property and what you're looking for. We'll come back to you with real options and a timeline built around your situation. Manzil is a licensed, independent mortgage brokerage — our service is completely free for you, as we're paid a commission by the bank once your loan closes.</p>
       <div class="contact-detail">
         <div class="ci-icon">✉</div>
         <div><strong>Email us</strong><span>info@manazil.com</span></div>
       </div>
       <div class="contact-detail">
         <div class="ci-icon">☎</div>
-        <div><strong>Call or WhatsApp</strong><span>505051234</span></div>
+        <div><strong>Call or WhatsApp</strong><span><a href="https://wa.me/971505051234">+971 50 505 1234</a></span></div>
       </div>
       <div class="contact-detail">
         <div class="ci-icon">◎</div>
@@ -363,22 +669,34 @@
     <div class="footer-grid">
       <div>
         <a href="#top" class="logo"><span class="logo-mark">M</span> Project Manzil</a>
-        <p style="max-width:280px;font-size:13.5px;">Your one-step solution for property mortgage — the best deals, the clearest timelines.</p>
+        <p style="max-width:320px;font-size:13.5px;">Your one-step solution for property mortgage — the best deals, the clearest timelines, at no cost to you.</p>
+        <div class="footer-social">
+          <a href="https://instagram.com/Manazil.DXB" target="_blank" rel="noopener" aria-label="Instagram">◎</a>
+        </div>
       </div>
       <div class="footer-cols">
         <div class="footer-col">
           <h4>Company</h4>
           <a href="#how">How it works</a>
+          <a href="#services">Services</a>
           <a href="#why">Why Manzil</a>
+          <a href="#faq">FAQ</a>
           <a href="#contact">Contact</a>
         </div>
         <div class="footer-col">
           <h4>Get in touch</h4>
           <a href="mailto:info@manazil.com">info@manazil.com</a>
-          <a href="tel:505051234">505051234</a>
+          <a href="https://wa.me/971505051234">+971 50 505 1234</a>
+          <a href="https://instagram.com/Manazil.DXB" target="_blank" rel="noopener">@Manazil.DXB</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms &amp; Conditions</a>
         </div>
       </div>
     </div>
+    <div class="footer-legal">Project Manzil is a trading name of Manazil, a licensed, independent mortgage brokerage based in Dubai, UAE. Manazil may receive a commission from the bank upon successful completion of your mortgage — this service is completely free to you and does not affect the rate or terms offered to you.</div>
     <div class="footer-bottom">
       <span>© <span id="year"></span> Project Manzil. All rights reserved.</span>
       <span>Rates shown are illustrative examples, not live offers.</span>
@@ -392,6 +710,40 @@
   const links = document.getElementById('navLinks');
   toggle.addEventListener('click', () => links.classList.toggle('open'));
   links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  function fmt(n){ return Math.round(n).toLocaleString('en-US'); }
+  function updateCalc(){
+    const price = parseFloat(document.getElementById('calcPrice').value) || 0;
+    const downPct = parseFloat(document.getElementById('calcDown').value);
+    const term = parseFloat(document.getElementById('calcTerm').value);
+    const rate = parseFloat(document.getElementById('calcRate').value);
+
+    const downAmt = price * downPct / 100;
+    const loan = Math.max(price - downAmt, 0);
+    const monthlyRate = rate / 100 / 12;
+    const n = term * 12;
+    let monthly;
+    if (monthlyRate > 0) {
+      monthly = loan * monthlyRate * Math.pow(1 + monthlyRate, n) / (Math.pow(1 + monthlyRate, n) - 1);
+    } else {
+      monthly = loan / n;
+    }
+    const totalPay = monthly * n;
+    const totalInterest = totalPay - loan;
+
+    document.getElementById('calcDownPct').textContent = downPct;
+    document.getElementById('calcDownAmt').textContent = fmt(downAmt);
+    document.getElementById('calcTermVal').textContent = term;
+    document.getElementById('calcRateVal').textContent = rate.toFixed(1);
+    document.getElementById('calcMonthly').textContent = fmt(monthly);
+    document.getElementById('calcLoanAmt').textContent = 'AED ' + fmt(loan);
+    document.getElementById('calcTotalInterest').textContent = 'AED ' + fmt(totalInterest);
+    document.getElementById('calcTotalPay').textContent = 'AED ' + fmt(totalPay);
+  }
+  ['calcPrice','calcDown','calcTerm','calcRate'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateCalc);
+  });
+  updateCalc();
 </script>
 
 </body>

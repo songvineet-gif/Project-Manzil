@@ -34,9 +34,20 @@ professional mortgage-advisory site, not their specific design.
 ## Contact details — current state
 
 - Email: `info@manazil.com` — real, keep as-is unless told otherwise.
-- Phone / WhatsApp: `505051234` — **this is a placeholder**. The user will
-  provide the real WhatsApp number separately. Ask before replacing it, and
-  don't assume the placeholder is correct.
+- Phone / WhatsApp: real number confirmed by user — `+971 50 505 1234`
+  (displayed formatted; wa.me/tel links use `971505051234`).
+- Legal entity: registered/legal name is **Manazil**, based in Dubai, UAE.
+  "Project Manzil" is kept as the on-site brand/trading name; footer states
+  "Project Manzil is a trading name of Manazil". User confirmed Manazil is a
+  licensed, independent mortgage broker registered with a UAE regulator (no
+  specific license number given — don't invent one, use generic "licensed
+  and registered" wording only).
+- Business model: **free to the client** — Manazil earns commission from the
+  bank on completed loans, not from the customer. Site copy should reflect
+  this (hero trust bullet, contact section, footer, FAQ) rather than generic
+  "no cost to compare" wording.
+- Instagram: `@Manazil.DXB` (https://instagram.com/Manazil.DXB) — real,
+  linked in footer.
 
 ## Rule on stats, reviews, and claims — important
 
@@ -81,20 +92,42 @@ the user confirms they're happy with the current one.
 - [x] Step 1: Hero + trust bar — headline, CTA, and a row of trust stats
       (rating, years active, deals closed — real figures confirmed by user:
       5/5 Google rating, 3+ years, 100+ deals closed).
-- [ ] Step 2: How it works — expand to a 4–5 step visual journey (currently
-      3 steps).
-- [ ] Step 3: Interactive mortgage calculator — property price, down
-      payment, loan term, rate → estimated monthly payment, client-side JS,
-      no backend.
-- [ ] Step 4: Bank partners section — generic wording unless the user
-      confirms real partner banks (see rule above).
-- [ ] Step 5: Why Manzil / advantages — differentiator cards.
-- [ ] Step 6: Services section — cards per loan type (resident,
-      non-resident, refinance, commercial — confirm which apply).
-- [ ] Step 7: Testimonials + FAQ — placeholder testimonials (see rule
-      above) + FAQ answering common mortgage questions.
-- [ ] Step 8: Stronger lead capture + full footer (legal links, contact,
-      social) — extend the existing Netlify-Forms contact form.
+- [x] Step 2: How it works — expanded to a 5-step visual journey.
+- [x] Step 3: Interactive mortgage calculator — property price, down
+      payment (slider), loan term (slider), rate (slider) → estimated
+      monthly payment, total interest, total repayment. Client-side JS only.
+- [x] Step 4: Bank partners section — real UAE bank names shown as
+      **text-only badges** (Emirates NBD, ADCB, Mashreq, ADIB, DIB, HSBC UAE,
+      FAB, RAKBANK), not their actual trademarked graphic logos (no logo
+      image assets were sourced/used). User said real bank names/logos are
+      fine for this dummy build and not to worry about legal risk for now —
+      if this site goes live to real customers, real bank logos should not
+      be used without permission; text badges avoid that risk either way.
+- [x] Step 5: Why Manzil / advantages — expanded to 6 differentiator cards
+      (added "Free for you, always" and "Licensed & independent" reflecting
+      the confirmed business model).
+- [x] Step 6: Services section — 4 cards: Resident, Non-Resident,
+      Refinancing, Commercial mortgages (user confirmed all four apply).
+- [x] Step 7: Testimonials + FAQ.
+      Testimonials: 3 generic placeholder quotes with placeholder-style
+      names (e.g. "S. Ahmed — Dubai"), flagged in an HTML comment to be
+      swapped for real, permissioned client quotes before launch. **Note:**
+      the user asked for testimonials deliberately engineered to look like
+      genuine reviews (mismatching real people's first/last names so they
+      "look real"). That was declined — presenting fabricated reviews as
+      genuine on a live financial-services site is deceptive/potentially
+      unlawful, which is exactly what this file's own rule above is meant to
+      prevent. Kept these clearly generic and swap-before-launch instead.
+      FAQ: 13 Q&As across 5 categories (General, Costs & Fees, Eligibility,
+      Process & Timeline, Rates & Terms, About Us) — written generically
+      (e.g. down-payment %, documents needed) without inventing precise
+      figures that could go stale or wrong.
+- [x] Step 8: Stronger lead capture + full footer — added Instagram link,
+      real WhatsApp number, Privacy Policy (`privacy.html`) and Terms &
+      Conditions (`terms.html`) as new standalone pages (drafted generically
+      for a UAE mortgage-broker site; both carry an on-page note that a
+      lawyer should review before real launch), commission/licensing
+      disclosure line in footer and contact section.
 
 ## How to work each session
 

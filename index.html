@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Manzil — Your One-Step Mortgage Solution</title>
+<meta name="description" content="Project Manzil finds you the best property mortgage deal and negotiates with banks on your behalf, with a clear timeline every step of the way.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#081226;
+    --navy-900:#0b1a33;
+    --navy-800:#12274a;
+    --navy-700:#1b3a66;
+    --gold-500:#c99a3c;
+    --gold-400:#d9b25c;
+    --ink:#111827;
+    --muted:#5b6472;
+    --line:#e6e8ec;
+    --bg:#f7f8fa;
+    --white:#ffffff;
+    --radius:14px;
+    --shadow:0 10px 30px rgba(11,26,51,0.08);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.55;
+  }
+  img{max-width:100%;}
+  a{color:inherit;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:14px 26px;border-radius:999px;font-weight:600;font-size:15px;
+    text-decoration:none;border:1px solid transparent;cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--gold-500);color:var(--navy-950);}
+  .btn-primary:hover{background:var(--gold-400);transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--white);border-color:rgba(255,255,255,0.35);}
+  .btn-ghost:hover{border-color:rgba(255,255,255,0.7);}
+  .btn-dark{background:var(--navy-900);color:var(--white);}
+  .btn-dark:hover{background:var(--navy-800);transform:translateY(-1px);}
+
+  /* NAV */
+  header{position:sticky;top:0;z-index:50;background:rgba(8,18,38,0.92);backdrop-filter:blur(8px);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--white);letter-spacing:.2px;text-decoration:none;}
+  .logo-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--gold-400),var(--gold-500));display:flex;align-items:center;justify-content:center;color:var(--navy-950);font-weight:800;font-size:15px;}
+  .nav-links{display:flex;gap:32px;align-items:center;}
+  .nav-links a{color:rgba(255,255,255,0.82);text-decoration:none;font-size:14.5px;font-weight:500;}
+  .nav-links a:hover{color:var(--white);}
+  .nav-cta{display:flex;align-items:center;gap:14px;}
+  .menu-toggle{display:none;background:none;border:none;color:var(--white);font-size:26px;cursor:pointer;}
+
+  /* HERO */
+  .hero{background:radial-gradient(1100px 600px at 80% -10%, rgba(201,154,60,0.18), transparent 60%), linear-gradient(180deg,var(--navy-950),var(--navy-900) 60%, var(--navy-800));color:var(--white);padding:88px 0 110px;}
+  .hero-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:center;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(201,154,60,0.14);border:1px solid rgba(201,154,60,0.35);color:var(--gold-400);font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;margin-bottom:22px;}
+  .hero h1{font-size:46px;line-height:1.15;font-weight:800;margin:0 0 20px;letter-spacing:-0.5px;}
+  .hero h1 span{color:var(--gold-400);}
+  .hero p.lead{font-size:18px;color:rgba(255,255,255,0.78);max-width:520px;margin:0 0 32px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px;}
+  .trust-row{display:flex;gap:28px;flex-wrap:wrap;font-size:13.5px;color:rgba(255,255,255,0.65);}
+  .trust-row div{display:flex;align-items:center;gap:8px;}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--gold-400);}
+
+  .hero-card{background:var(--white);border-radius:18px;padding:26px;box-shadow:0 30px 60px rgba(0,0,0,0.35);color:var(--ink);}
+  .hero-card h3{margin:0 0 4px;font-size:15px;color:var(--muted);font-weight:600;}
+  .hero-card .big{font-size:26px;font-weight:800;margin:0 0 18px;}
+  .compare-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-size:14px;}
+  .compare-row:first-of-type{border-top:none;}
+  .compare-row .bank{font-weight:600;}
+  .compare-row .rate{color:#1a7f4b;font-weight:700;}
+  .badge-best{background:#eaf7ee;color:#1a7f4b;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;margin-left:8px;}
+
+  /* SECTION HEADINGS */
+  section{padding:88px 0;}
+  .section-head{max-width:640px;margin:0 auto 52px;text-align:center;}
+  .kicker{color:var(--gold-500);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .section-head h2{font-size:32px;font-weight:800;margin:0 0 14px;letter-spacing:-0.4px;}
+  .section-head p{color:var(--muted);font-size:16px;margin:0;}
+
+  /* STEPS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .step-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:30px 26px;box-shadow:var(--shadow);position:relative;}
+  .step-num{width:38px;height:38px;border-radius:10px;background:var(--navy-900);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;margin-bottom:18px;}
+  .step-card h3{font-size:18px;margin:0 0 8px;font-weight:700;}
+  .step-card p{color:var(--muted);font-size:14.5px;margin:0;}
+
+  .timeline{margin-top:56px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px;box-shadow:var(--shadow);}
+  .timeline-title{font-weight:700;font-size:15px;margin-bottom:26px;color:var(--navy-900);}
+  .timeline-track{display:flex;align-items:flex-start;position:relative;}
+  .timeline-track::before{content:"";position:absolute;top:9px;left:0;right:0;height:2px;background:var(--line);}
+  .tl-item{flex:1;text-align:center;position:relative;padding:0 8px;}
+  .tl-dot{width:20px;height:20px;border-radius:50%;background:var(--white);border:3px solid var(--gold-500);margin:0 auto 14px;position:relative;z-index:1;}
+  .tl-item h4{font-size:13.5px;font-weight:700;margin:0 0 4px;}
+  .tl-item span{font-size:12.5px;color:var(--muted);}
+  .tl-note{margin-top:24px;font-size:12.5px;color:var(--muted);text-align:center;}
+
+  /* FEATURES */
+  .features{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .feature-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;}
+  .feature-icon{width:42px;height:42px;border-radius:10px;background:rgba(201,154,60,0.12);color:var(--gold-500);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:16px;}
+  .feature-card h3{font-size:16px;margin:0 0 8px;font-weight:700;}
+  .feature-card p{font-size:13.8px;color:var(--muted);margin:0;}
+
+  .band-dark{background:linear-gradient(180deg,var(--navy-900),var(--navy-950));color:var(--white);}
+  .band-dark .section-head p{color:rgba(255,255,255,0.65);}
+  .band-dark .kicker{color:var(--gold-400);}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
+  .stat h3{font-size:34px;font-weight:800;color:var(--gold-400);margin:0 0 6px;}
+  .stat p{margin:0;color:rgba(255,255,255,0.65);font-size:13.5px;}
+
+  /* FORM */
+  .contact-wrap{display:grid;grid-template-columns:0.9fr 1.1fr;gap:48px;align-items:start;}
+  .contact-info h2{font-size:30px;font-weight:800;margin:0 0 14px;letter-spacing:-0.4px;}
+  .contact-info p{color:var(--muted);font-size:15.5px;margin:0 0 24px;}
+  .contact-detail{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px;}
+  .contact-detail .ci-icon{width:36px;height:36px;border-radius:9px;background:rgba(201,154,60,0.12);color:var(--gold-500);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
+  .contact-detail strong{display:block;font-size:14px;}
+  .contact-detail span{font-size:13.5px;color:var(--muted);}
+
+  .form-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--navy-900);}
+  .field input, .field select, .field textarea{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:14.5px;background:#fbfbfc;
+  }
+  .field textarea{resize:vertical;min-height:90px;}
+  .field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--gold-400);outline-offset:1px;background:#fff;}
+  .form-note{font-size:12px;color:var(--muted);margin-top:10px;text-align:center;}
+
+  footer{background:var(--navy-950);color:rgba(255,255,255,0.6);padding:48px 0 28px;}
+  .footer-grid{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;margin-bottom:32px;}
+  footer .logo{margin-bottom:10px;}
+  .footer-cols{display:flex;gap:64px;flex-wrap:wrap;}
+  .footer-col h4{color:var(--white);font-size:13px;margin:0 0 12px;}
+  .footer-col a{display:block;color:rgba(255,255,255,0.55);text-decoration:none;font-size:13.5px;margin-bottom:9px;}
+  .footer-col a:hover{color:var(--white);}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;}
+
+  @media (max-width: 880px){
+    .hero-grid, .contact-wrap{grid-template-columns:1fr;}
+    .hero h1{font-size:34px;}
+    .steps{grid-template-columns:1fr;}
+    .features{grid-template-columns:1fr 1fr;}
+    .stats{grid-template-columns:1fr 1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .nav-links{position:fixed;top:66px;left:0;right:0;background:var(--navy-950);flex-direction:column;padding:20px 24px;gap:18px;display:none;}
+    .nav-links.open{display:flex;}
+    .menu-toggle{display:block;}
+    .timeline-track{flex-direction:column;gap:22px;align-items:flex-start;}
+    .timeline-track::before{display:none;}
+  }
+  @media (max-width: 560px){
+    .features{grid-template-columns:1fr;}
+    .stats{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <a href="#top" class="logo"><span class="logo-mark">M</span> Project Manzil</a>
+      <div class="nav-links" id="navLinks">
+        <a href="#how">How it works</a>
+        <a href="#why">Why Manzil</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#contact" class="btn btn-primary" style="padding:10px 20px;font-size:14px;">Get Started</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">● Mortgage advisory, done for you</div>
+      <h1>Your one-step path to the <span>best mortgage deal.</span></h1>
+      <p class="lead">Project Manzil compares lenders, negotiates with banks on your behalf, and shows you exactly what to expect — the best deal, the clearest timeline, no back-and-forth.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Get Your Free Loan Comparison</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <div class="trust-row">
+        <div><span class="dot"></span> We deal with the banks, not you</div>
+        <div><span class="dot"></span> Clear timelines at every step</div>
+        <div><span class="dot"></span> No cost to get your comparison</div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>Sample comparison</h3>
+      <p class="big">Best available rate found</p>
+      <div class="compare-row"><span class="bank">Bank A <span class="badge-best">Best deal</span></span><span class="rate">3.79%</span></div>
+      <div class="compare-row"><span class="bank">Bank B</span><span class="rate">4.05%</span></div>
+      <div class="compare-row"><span class="bank">Bank C</span><span class="rate">4.20%</span></div>
+      <div class="compare-row"><span class="bank">Bank D</span><span class="rate">4.35%</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">How it works</div>
+      <h2>Three steps. We handle the rest.</h2>
+      <p>You tell us what you need once. We take it from there — comparing, negotiating, and keeping you updated until you're holding the keys.</p>
+    </div>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Tell us about your property</h3>
+        <p>A short form covering the property, your finances, and what you're looking for. Takes a few minutes, no paperwork yet.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>We negotiate with the banks</h3>
+        <p>Our team compares offers across lenders and negotiates directly with banks on your behalf — so you don't have to make a single call.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>You choose, with full visibility</h3>
+        <p>We lay out every option side by side — rate, timeline, total cost — so you can pick the best deal with total confidence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline" style="padding-top:0;">
+  <div class="wrap">
+    <div class="timeline">
+      <div class="timeline-title">Typical mortgage timeline (illustrative — actual timing depends on your bank and paperwork)</div>
+      <div class="timeline-track">
+        <div class="tl-item"><div class="tl-dot"></div><h4>Application</h4><span>Day 1–2</span></div>
+        <div class="tl-item"><div class="tl-dot"></div><h4>Bank review</h4><span>Day 3–7</span></div>
+        <div class="tl-item"><div class="tl-dot"></div><h4>Offer comparison</h4><span>Day 8–10</span></div>
+        <div class="tl-item"><div class="tl-dot"></div><h4>Approval</h4><span>Day 11–15</span></div>
+        <div class="tl-item"><div class="tl-dot"></div><h4>Closing</h4><span>Day 16–21</span></div>
+      </div>
+      <div class="tl-note">We'll give you a specific, updated timeline for your case once we start comparing offers on your behalf.</div>
+    </div>
+  </div>
+</section>
+
+<section class="band-dark" id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Why Manzil</div>
+      <h2>Everything you'd have to chase down yourself — done for you.</h2>
+      <p>Property mortgages usually mean weeks of calls, comparisons, and paperwork. We turn that into one simple, transparent process.</p>
+    </div>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">$</div>
+        <h3>Best available deals</h3>
+        <p>We compare across banks so you see the strongest rate available to you, not just the first offer.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⏱</div>
+        <h3>Clear timelines</h3>
+        <p>Know exactly how long each stage takes, from application to closing — no guessing, no radio silence.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤝</div>
+        <h3>We talk to the banks</h3>
+        <p>Our team negotiates directly with lenders on your behalf, so you're never stuck on hold or chasing paperwork.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◧</div>
+        <h3>Visual, side-by-side offers</h3>
+        <p>See every option laid out clearly — rate, timeline, and total cost — so the right choice is obvious.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-wrap">
+    <div class="contact-info">
+      <div class="kicker">Get started</div>
+      <h2>Get your free loan comparison</h2>
+      <p>Tell us a bit about the property and what you're looking for. We'll come back to you with real options and a timeline built around your situation.</p>
+      <div class="contact-detail">
+        <div class="ci-icon">✉</div>
+        <div><strong>Email us</strong><span>hello@projectmanzil.com</span></div>
+      </div>
+      <div class="contact-detail">
+        <div class="ci-icon">☎</div>
+        <div><strong>Call or WhatsApp</strong><span>+971 00 000 0000</span></div>
+      </div>
+      <div class="contact-detail">
+        <div class="ci-icon">◎</div>
+        <div><strong>Response time</strong><span>We usually reply within one business day</span></div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <!-- Netlify Forms: once this file is deployed on Netlify, submissions appear automatically
+           under Site → Forms in your Netlify dashboard. No backend needed. -->
+      <form name="loan-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="loan-inquiry" />
+        <p style="display:none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="field">
+            <label for="value">Estimated property value</label>
+            <input type="text" id="value" name="value" placeholder="e.g. AED 1,500,000">
+          </div>
+        </div>
+        <div class="field">
+          <label for="message">Anything else we should know?</label>
+          <textarea id="message" name="message" placeholder="Property location, timing, current mortgage status, etc."></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark" style="width:100%;">Get My Free Loan Comparison</button>
+        <div class="form-note">By submitting, you agree to be contacted by Project Manzil about your inquiry.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#top" class="logo"><span class="logo-mark">M</span> Project Manzil</a>
+        <p style="max-width:280px;font-size:13.5px;">Your one-step solution for property mortgage — the best deals, the clearest timelines.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#how">How it works</a>
+          <a href="#why">Why Manzil</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Get in touch</h4>
+          <a href="mailto:hello@projectmanzil.com">hello@projectmanzil.com</a>
+          <a href="tel:+971000000000">+971 00 000 0000</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Project Manzil. All rights reserved.</span>
+      <span>Rates shown are illustrative examples, not live offers.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+</script>
+
+</body>
+</html>

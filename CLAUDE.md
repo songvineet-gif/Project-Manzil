@@ -24,7 +24,7 @@ professional mortgage-advisory site, not their specific design.
 
 - Colors: navy `#081226` / `#0b1a33` / `#12274a` (backgrounds, header, footer),
   gold `#c99a3c` / `#d9b25c` (accent, CTAs, highlights)
-- Font: Inter (Google Fonts)
+- Font: Times New Roman (serif)
 - Style: clean, trustworthy, fintech-leaning. Rounded cards, soft shadows,
   generous whitespace.
 - Single file: everything lives in `index.html` — inline `<style>` and

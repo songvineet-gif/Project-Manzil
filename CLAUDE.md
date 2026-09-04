@@ -153,6 +153,27 @@ the user confirms they're happy with the current one.
       sticky header) because sideways reveals otherwise cause horizontal
       scroll on mobile.
 
+- [x] Step 12: Three.js Dubai skyline behind the hero. The Burj is generated
+      from geometry (three wings stepping back and rotating, then the spire) —
+      no model file to license. Strictly additive: canvas is transparent over
+      the gradient, so no-WebGL / library-fails / reduced-motion / phone all
+      fall back to the hero exactly as it was. Tested for all five.
+      Gotchas that cost time and will bite again if changed:
+        * metalness with no envMap renders black — keep it near zero
+        * THREE.Fog works on view depth, not distance; the far plane must sit
+          well beyond the camera-to-city distance or the city flattens
+        * the city is TWO instanced draws, not ~150 meshes — keep it that way
+        * the render loop pauses when the hero leaves the viewport
+      three.min.js is vendored (r128, MIT) and loaded from JS ONLY after the
+      width / reduced-motion / WebGL checks pass, so phones never download it.
+- [x] Step 13: Social + search metadata. OG/Twitter tags, canonical, theme
+      colour, robots.txt, sitemap.xml, and a 1200x630 social-card.png rendered
+      in-brand. JSON-LD for FinancialService + FAQPage; the FAQ entries are
+      GENERATED FROM THE RENDERED PAGE and a test asserts they match — if you
+      edit an FAQ, regenerate the JSON-LD or Google will flag the mismatch.
+      Deliberately no aggregateRating: no verifiable review count exists.
+
+
 ## How to work each session
 
 1. Read this file's checklist to see what's next.

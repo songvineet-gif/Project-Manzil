@@ -34,8 +34,8 @@ professional mortgage-advisory site, not their specific design.
 ## Contact details — current state
 
 - Email: `info@manazil.com` — real, keep as-is unless told otherwise.
-- Phone / WhatsApp: real number confirmed by user — `+971 50 505 1234`
-  (displayed formatted; wa.me/tel links use `971505051234`).
+- Phone / WhatsApp: real number confirmed by user — `+971 50 569 6741`
+  (displayed formatted; wa.me/tel links use `971505696741`).
 - Legal entity: registered/legal name is **Manazil**, based in Dubai, UAE.
   "Project Manzil" is kept as the on-site brand/trading name; footer states
   "Project Manzil is a trading name of Manazil". User confirmed Manazil is a

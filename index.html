@@ -39,11 +39,11 @@
   .lift:hover{transform:translateY(-6px) scale(1.014);box-shadow:0 22px 48px rgba(11,26,51,0.16);}
   .band-dark .lift:hover{box-shadow:0 22px 48px rgba(0,0,0,0.4);}
 
-  /* Keep the sideways travel inside the page gutter on small screens, so browsers
-     without overflow:clip support still never show a horizontal scrollbar. */
+  /* Sideways entry is a wide-screen effect: it reads as choreography only when there
+     are real columns to fly in from. On a phone, cards span nearly the full width, so
+     the travel is barely visible and can push past the viewport edge. Rise instead. */
   @media (max-width: 700px){
-    .reveal-left{transform:translateX(-22px);}
-    .reveal-right{transform:translateX(22px);}
+    .reveal-left, .reveal-right{transform:translateY(28px);}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -209,19 +209,23 @@
   .amort-toggle::-webkit-details-marker{display:none;}
   .amort-toggle::after{content:"View schedule ▾";font-size:12.5px;font-weight:600;color:var(--gold-500);white-space:nowrap;}
   details[open] .amort-toggle::after{content:"Hide schedule ▴";}
-  .amort-table-wrap{max-height:280px;overflow-y:auto;margin-top:14px;border:1px solid var(--line);border-radius:10px;}
-  table.amort-table{width:100%;border-collapse:collapse;font-size:12.5px;}
-  .amort-table th{position:sticky;top:0;background:var(--bg);text-align:right;padding:8px 10px;font-weight:700;color:var(--navy-900);border-bottom:1px solid var(--line);}
+  .amort-note{font-size:12.5px;color:var(--muted);margin:12px 0 0;line-height:1.55;}
+  .amort-note strong{color:var(--navy-900);}
+  .amort-table-wrap{max-height:300px;overflow-y:auto;margin-top:12px;border:1px solid var(--line);border-radius:10px;}
+  table.amort-table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums;}
+  .amort-table th{position:sticky;top:0;z-index:1;background:var(--bg);text-align:right;padding:9px 10px;font-weight:700;color:var(--navy-900);border-bottom:1px solid var(--line);white-space:nowrap;}
+  .amort-table td{padding:8px 10px;text-align:right;color:var(--muted);border-bottom:1px solid var(--line);white-space:nowrap;}
   .amort-table th:first-child, .amort-table td:first-child{text-align:left;}
-  .amort-table td{padding:7px 10px;text-align:right;color:var(--muted);border-bottom:1px solid var(--line);}
-  .amort-table tr:last-child td{border-bottom:none;}
-  @media (max-width: 480px){
-    .amort-table thead{display:none;}
-    .amort-table, .amort-table tbody, .amort-table tr, .amort-table td{display:block;width:100%;}
-    .amort-table tr{padding:10px 12px;border-bottom:1px solid var(--line);}
-    .amort-table td{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border:none;text-align:right;}
-    .amort-table td::before{content:attr(data-label);font-weight:600;color:var(--navy-900);text-align:left;}
-    .amort-table td:first-child{font-weight:700;color:var(--navy-900);}
+  .amort-table td:first-child{font-weight:700;color:var(--navy-900);}
+  /* Alternating rows keep the eye on one year while scanning across. */
+  .amort-table tbody tr:nth-child(even){background:#fafbfc;}
+  .amort-table tbody tr:last-child td{border-bottom:none;}
+  @media (max-width: 560px){
+    .amort-table{font-size:12px;}
+    .amort-table th, .amort-table td{padding:8px 6px;}
+    /* The instalment is identical every year, so on a phone it earns its space
+       better as a single line above the table than as a repeated column. */
+    .amort-table th:nth-child(4), .amort-table td:nth-child(4){display:none;}
   }
 
   /* FEATURES */
@@ -563,10 +567,10 @@
       <div class="calc-card">
         <details>
           <summary class="amort-toggle">Yearly repayment schedule</summary>
-          <p class="calc-card-sub" style="margin-top:10px;">Annual totals across the life of the loan. Early years are weighted towards interest; the balance falls faster as the principal share grows.</p>
+          <p class="amort-note">All figures in AED. Your instalment never changes — <strong>AED <span id="amortMonthly">—</span> a month</strong>, or AED <span id="amortYearly">—</span> a year. What changes is the split: interest falls away as more of each payment clears the loan.</p>
           <div class="amort-table-wrap">
             <table class="amort-table">
-              <thead><tr><th>Year</th><th>Principal repaid</th><th>Interest paid</th><th>Total paid</th><th>Balance remaining</th></tr></thead>
+              <thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Total paid</th><th>Balance</th></tr></thead>
               <tbody id="amortBody"></tbody>
             </table>
           </div>
@@ -1079,6 +1083,10 @@
   function buildAmortization(loan, monthlyRate, months, monthly, termYears){
     const tbody = document.getElementById('amortBody');
     tbody.innerHTML = '';
+    // A fixed-rate instalment is the same every year, so it is stated once above the
+    // table rather than repeated down a column.
+    document.getElementById('amortMonthly').textContent = fmt(monthly);
+    document.getElementById('amortYearly').textContent = fmt(monthly * 12);
     let balance = loan;
     for (let year = 1; year <= termYears && balance > 0.5; year++) {
       let yearPrincipal = 0, yearInterest = 0;
@@ -1091,11 +1099,11 @@
         yearInterest += interestPortion;
       }
       const tr = document.createElement('tr');
-      tr.innerHTML = '<td data-label="Year">' + year + '</td>' +
-        '<td data-label="Principal repaid">AED ' + fmt(yearPrincipal) + '</td>' +
-        '<td data-label="Interest paid">AED ' + fmt(yearInterest) + '</td>' +
-        '<td data-label="Total paid">AED ' + fmt(yearPrincipal + yearInterest) + '</td>' +
-        '<td data-label="Balance remaining">AED ' + fmt(Math.max(balance, 0)) + '</td>';
+      tr.innerHTML = '<td>' + year + '</td>' +
+        '<td>' + fmt(yearPrincipal) + '</td>' +
+        '<td>' + fmt(yearInterest) + '</td>' +
+        '<td>' + fmt(yearPrincipal + yearInterest) + '</td>' +
+        '<td>' + fmt(Math.max(balance, 0)) + '</td>';
       tbody.appendChild(tr);
     }
   }

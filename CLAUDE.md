@@ -128,6 +128,30 @@ the user confirms they're happy with the current one.
       for a UAE mortgage-broker site; both carry an on-page note that a
       lawyer should review before real launch), commission/licensing
       disclosure line in footer and contact section.
+- [x] Step 9: Mortgage calculator upgraded to market standard, then to
+      CBUAE-accurate. Buyer type is nationality-based (UAE national /
+      expat resident / non-resident) because Reg 31/2013 keys LTV off
+      nationality, not residency. Property type (first / second /
+      off-plan) also changes the cap. Full matrix: nationals 80/70/65,
+      expats 75/65/60, off-plan 50 for everyone. Non-resident figures
+      are bank policy, NOT a Central Bank cap — labelled as such on the
+      site. Also added upfront-cost breakdown (DLD 4%+580, mortgage reg
+      0.25%+290, valuation, arrangement fee) and a yearly amortisation
+      schedule.
+- [x] Step 10: "How much can you borrow" affordability block. Models the
+      50% Debt Burden Ratio, counts credit cards at 5% of *limit* (not
+      balance) as UAE banks do, applies the income multiple cap (8x
+      nationals / 7x expats), and names which of the three ceilings
+      binds. Rule constants live in BUYER_RULES / DBR_CAP /
+      CARD_LIMIT_FACTOR in index.html — update there if rules change.
+- [x] Step 11: Scroll motion design. Columns reveal from their own side
+      of the grid, staggered across each row; cards lift on hover
+      (pointer devices only); hero card parallax. Reveal classes are
+      applied from JS, never in markup, so a script failure cannot leave
+      the page blank — keep it that way. Honours prefers-reduced-motion.
+      body has overflow-x:clip (not hidden — hidden would break the
+      sticky header) because sideways reveals otherwise cause horizontal
+      scroll on mobile.
 
 ## How to work each session
 

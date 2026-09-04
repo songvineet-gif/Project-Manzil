@@ -185,6 +185,19 @@
   .calc-cost-row .cc-label{color:var(--muted);}
   .calc-cost-row .cc-val{font-weight:600;color:var(--navy-900);white-space:nowrap;}
   .calc-cost-total{display:flex;justify-content:space-between;gap:10px;padding-top:14px;margin-top:4px;border-top:2px solid var(--navy-900);font-weight:800;font-size:15px;color:var(--navy-900);}
+  /* Our own fee is the one line on this list that costs nothing — say so in the positive. */
+  .cc-free .cc-label{color:var(--navy-900);font-weight:600;}
+  .cc-free .cc-val{color:#1a7f4b;font-weight:700;white-space:normal;text-align:right;}
+
+  .calc-promise{margin-top:34px;padding:30px 34px;border-radius:var(--radius);background:linear-gradient(135deg,var(--navy-950),var(--navy-800));color:var(--white);text-align:center;box-shadow:var(--shadow);}
+  .calc-promise p{margin:0;font-size:19px;line-height:1.5;font-weight:600;}
+  .calc-promise p + p{margin-top:10px;font-size:16px;font-weight:400;color:rgba(255,255,255,0.8);}
+  .calc-promise p + p strong, .calc-promise em{color:var(--gold-400);font-style:normal;font-weight:700;}
+  @media (max-width: 560px){
+    .calc-promise{padding:24px 20px;}
+    .calc-promise p{font-size:17px;}
+    .calc-promise p + p{font-size:15px;}
+  }
 
   .afford-block{margin-top:48px;padding-top:44px;border-top:1px solid var(--line);}
   .afford-head{max-width:640px;margin:0 auto 28px;text-align:center;}
@@ -543,16 +556,17 @@
         <div class="calc-cost-row"><span class="cc-label">DLD transfer fee (4% + AED 580)</span><span class="cc-val" id="ccDld">—</span></div>
         <div class="calc-cost-row"><span class="cc-label">Mortgage registration (0.25% + AED 290)</span><span class="cc-val" id="ccMortReg">—</span></div>
         <div class="calc-cost-row"><span class="cc-label">Property valuation fee (typical)</span><span class="cc-val" id="ccValuation">—</span></div>
-        <div class="calc-cost-row"><span class="cc-label">Bank arrangement fee (up to 1%)</span><span class="cc-val" id="ccBankFee">—</span></div>
+        <div class="calc-cost-row"><span class="cc-label">Bank arrangement fee (up to 1%, charged by the bank)</span><span class="cc-val" id="ccBankFee">—</span></div>
+        <div class="calc-cost-row cc-free"><span class="cc-label">Project Manzil's fee</span><span class="cc-val">AED 0 — paid by the bank</span></div>
         <div class="calc-cost-total"><span>Total cash needed</span><span id="ccTotal">—</span></div>
       </div>
       <div class="calc-card">
         <details>
           <summary class="amort-toggle">Yearly repayment schedule</summary>
-          <p class="calc-card-sub" style="margin-top:10px;">How much of each year's payments goes to interest vs. principal.</p>
+          <p class="calc-card-sub" style="margin-top:10px;">Annual totals across the life of the loan. Early years are weighted towards interest; the balance falls faster as the principal share grows.</p>
           <div class="amort-table-wrap">
             <table class="amort-table">
-              <thead><tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Balance remaining</th></tr></thead>
+              <thead><tr><th>Year</th><th>Principal repaid</th><th>Interest paid</th><th>Total paid</th><th>Balance remaining</th></tr></thead>
               <tbody id="amortBody"></tbody>
             </table>
           </div>
@@ -616,6 +630,11 @@
           <div class="calc-cost-total"><span>Borrowing power lost</span><span id="impTotal">—</span></div>
         </div>
       </div>
+    </div>
+
+    <div class="calc-promise">
+      <p>We deal with the banks on your behalf and bring you the strongest offer on the table.</p>
+      <p><em>It costs you nothing</em> — our commission comes from the bank once your mortgage completes, never from you.</p>
     </div>
 
     <p class="tl-note" style="margin-top:24px;">Estimate only — actual rate, eligibility, fees, and monthly payment depend on the bank, your profile, and current market conditions. LTV caps and the 50% debt burden ratio follow CBUAE Regulation No. 31/2013; individual banks often apply stricter limits of their own.</p>
@@ -940,6 +959,7 @@
       { sel: '.calc-result',                     type: 'right'  },
       { sel: '.calc-extra > .calc-card',         type: 'sides', stagger: 90 },
       { sel: '.afford-head',                     type: 'up'     },
+      { sel: '.calc-promise',                    type: 'scale'  },
       { sel: '.bank-badges > .bank-badge',       type: 'sides', stagger: 45 },
       { sel: '.features > .feature-card',        type: 'sides', stagger: 70 },
       { sel: '.testimonials-grid > .testimonial-card', type: 'sides', stagger: 80 },
@@ -1071,9 +1091,10 @@
         yearInterest += interestPortion;
       }
       const tr = document.createElement('tr');
-      tr.innerHTML = '<td>Year ' + year + '</td>' +
-        '<td data-label="Principal paid">AED ' + fmt(yearPrincipal) + '</td>' +
+      tr.innerHTML = '<td data-label="Year">' + year + '</td>' +
+        '<td data-label="Principal repaid">AED ' + fmt(yearPrincipal) + '</td>' +
         '<td data-label="Interest paid">AED ' + fmt(yearInterest) + '</td>' +
+        '<td data-label="Total paid">AED ' + fmt(yearPrincipal + yearInterest) + '</td>' +
         '<td data-label="Balance remaining">AED ' + fmt(Math.max(balance, 0)) + '</td>';
       tbody.appendChild(tr);
     }

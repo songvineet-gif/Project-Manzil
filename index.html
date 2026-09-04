@@ -131,12 +131,43 @@
   .calc-inputs{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);}
   .calc-inputs input[type="range"]{width:100%;accent-color:var(--gold-500);}
   .calc-range-value{font-size:13px;color:var(--muted);margin-top:6px;}
+  .calc-hint{font-size:12px;color:#8a6a1f;margin-top:6px;background:rgba(201,154,60,0.1);border:1px solid rgba(201,154,60,0.28);padding:7px 10px;border-radius:8px;display:none;}
+  .calc-hint.show{display:block;}
   .calc-result{background:var(--navy-900);color:var(--white);border-radius:var(--radius);padding:30px;position:sticky;top:90px;}
   .calc-result h3{margin:0 0 6px;font-size:13.5px;color:rgba(255,255,255,0.68);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
   .calc-big{font-size:36px;font-weight:800;color:var(--gold-400);margin:0 0 18px;}
   .calc-result .compare-row{border-top-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);}
   .calc-result .bank{font-weight:500;color:rgba(255,255,255,0.62);}
   .calc-result .rate{color:var(--white);font-weight:700;}
+
+  .calc-extra{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px;align-items:start;}
+  .calc-card{min-width:0;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);}
+  .calc-card h3{font-size:15px;margin:0 0 4px;font-weight:700;color:var(--navy-900);text-transform:none;letter-spacing:0;}
+  .calc-card .calc-card-sub{font-size:12.5px;color:var(--muted);margin:0 0 16px;}
+  .calc-cost-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:13.5px;}
+  .calc-cost-row:first-of-type{border-top:none;}
+  .calc-cost-row .cc-label{color:var(--muted);}
+  .calc-cost-row .cc-val{font-weight:600;color:var(--navy-900);white-space:nowrap;}
+  .calc-cost-total{display:flex;justify-content:space-between;gap:10px;padding-top:14px;margin-top:4px;border-top:2px solid var(--navy-900);font-weight:800;font-size:15px;color:var(--navy-900);}
+
+  .amort-toggle{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700;font-size:14px;color:var(--navy-900);padding:2px 0 4px;}
+  .amort-toggle::-webkit-details-marker{display:none;}
+  .amort-toggle::after{content:"View schedule ▾";font-size:12.5px;font-weight:600;color:var(--gold-500);white-space:nowrap;}
+  details[open] .amort-toggle::after{content:"Hide schedule ▴";}
+  .amort-table-wrap{max-height:280px;overflow-y:auto;margin-top:14px;border:1px solid var(--line);border-radius:10px;}
+  table.amort-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .amort-table th{position:sticky;top:0;background:var(--bg);text-align:right;padding:8px 10px;font-weight:700;color:var(--navy-900);border-bottom:1px solid var(--line);}
+  .amort-table th:first-child, .amort-table td:first-child{text-align:left;}
+  .amort-table td{padding:7px 10px;text-align:right;color:var(--muted);border-bottom:1px solid var(--line);}
+  .amort-table tr:last-child td{border-bottom:none;}
+  @media (max-width: 480px){
+    .amort-table thead{display:none;}
+    .amort-table, .amort-table tbody, .amort-table tr, .amort-table td{display:block;width:100%;}
+    .amort-table tr{padding:10px 12px;border-bottom:1px solid var(--line);}
+    .amort-table td{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border:none;text-align:right;}
+    .amort-table td::before{content:attr(data-label);font-weight:600;color:var(--navy-900);text-align:left;}
+    .amort-table td:first-child{font-weight:700;color:var(--navy-900);}
+  }
 
   /* FEATURES */
   .features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
@@ -220,6 +251,7 @@
     .features{grid-template-columns:repeat(2,1fr);}
     .testimonials-grid{grid-template-columns:1fr;}
     .bank-badges{grid-template-columns:repeat(2,1fr);}
+    .calc-extra{grid-template-columns:1fr;}
   }
   @media (max-width: 880px){
     .hero-grid, .contact-wrap, .calc-grid{grid-template-columns:1fr;}
@@ -409,7 +441,7 @@
     <div class="section-head">
       <div class="kicker">Plan ahead</div>
       <h2>Estimate your monthly mortgage payment</h2>
-      <p>Get a quick estimate based on property price, down payment, and loan term. This is illustrative only — your real rate depends on your profile and the bank.</p>
+      <p>Get a quick estimate of your monthly payment, minimum down payment, upfront costs, and full repayment schedule. This is illustrative only — your real rate depends on your profile and the bank.</p>
     </div>
     <div class="calc-grid">
       <div class="calc-inputs">
@@ -418,9 +450,17 @@
           <input type="number" id="calcPrice" value="1500000" min="100000" step="10000">
         </div>
         <div class="field">
+          <label for="calcResidency">Residency status</label>
+          <select id="calcResidency">
+            <option value="resident" selected>UAE / GCC national or resident</option>
+            <option value="nonresident">Non-resident</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="calcDown">Down payment</label>
-          <input type="range" id="calcDown" min="10" max="80" value="20" step="1">
+          <input type="range" id="calcDown" min="20" max="80" value="20" step="1">
           <div class="calc-range-value"><span id="calcDownPct">20</span>% — AED <span id="calcDownAmt">300,000</span></div>
+          <div class="calc-hint" id="calcDownHint"></div>
         </div>
         <div class="field">
           <label for="calcTerm">Loan term</label>
@@ -437,12 +477,39 @@
         <h3>Estimated monthly payment</h3>
         <p class="calc-big">AED <span id="calcMonthly">0</span></p>
         <div class="compare-row"><span class="bank">Loan amount</span><span class="rate" id="calcLoanAmt">—</span></div>
+        <div class="compare-row"><span class="bank">Loan-to-value</span><span class="rate" id="calcLTV">—</span></div>
         <div class="compare-row"><span class="bank">Total interest</span><span class="rate" id="calcTotalInterest">—</span></div>
         <div class="compare-row"><span class="bank">Total repayment</span><span class="rate" id="calcTotalPay">—</span></div>
         <a href="#contact" class="btn btn-primary" style="width:100%;margin-top:18px;">Get my real rate</a>
       </div>
     </div>
-    <p class="tl-note" style="margin-top:24px;">Estimate only — actual rate, eligibility, and monthly payment depend on the bank, your profile, and current market conditions.</p>
+
+    <div class="calc-extra">
+      <div class="calc-card">
+        <h3>Upfront cash you'll need</h3>
+        <p class="calc-card-sub">Typical UAE purchase costs on top of your down payment — confirm exact fees with your bank and the Dubai Land Department.</p>
+        <div class="calc-cost-row"><span class="cc-label">Down payment</span><span class="cc-val" id="ccDown">—</span></div>
+        <div class="calc-cost-row"><span class="cc-label">DLD transfer fee (4% + AED 580)</span><span class="cc-val" id="ccDld">—</span></div>
+        <div class="calc-cost-row"><span class="cc-label">Mortgage registration (0.25% + AED 290)</span><span class="cc-val" id="ccMortReg">—</span></div>
+        <div class="calc-cost-row"><span class="cc-label">Property valuation fee (typical)</span><span class="cc-val" id="ccValuation">—</span></div>
+        <div class="calc-cost-row"><span class="cc-label">Bank arrangement fee (up to 1%)</span><span class="cc-val" id="ccBankFee">—</span></div>
+        <div class="calc-cost-total"><span>Total cash needed</span><span id="ccTotal">—</span></div>
+      </div>
+      <div class="calc-card">
+        <details>
+          <summary class="amort-toggle">Yearly repayment schedule</summary>
+          <p class="calc-card-sub" style="margin-top:10px;">How much of each year's payments goes to interest vs. principal.</p>
+          <div class="amort-table-wrap">
+            <table class="amort-table">
+              <thead><tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Balance remaining</th></tr></thead>
+              <tbody id="amortBody"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <p class="tl-note" style="margin-top:24px;">Estimate only — actual rate, eligibility, fees, and monthly payment depend on the bank, your profile, and current market conditions.</p>
   </div>
 </section>
 
@@ -746,21 +813,64 @@
   }));
 
   function fmt(n){ return Math.round(n).toLocaleString('en-US'); }
+
+  const CALC_PRICE_THRESHOLD = 5000000;
+  const CALC_MIN_DOWN = {
+    resident: { under: 20, over: 30 },
+    nonresident: { under: 25, over: 35 }
+  };
+  function minDownPctFor(residency, price){
+    const rule = CALC_MIN_DOWN[residency] || CALC_MIN_DOWN.resident;
+    return price > CALC_PRICE_THRESHOLD ? rule.over : rule.under;
+  }
+
+  function buildAmortization(loan, monthlyRate, months, monthly, termYears){
+    const tbody = document.getElementById('amortBody');
+    tbody.innerHTML = '';
+    let balance = loan;
+    for (let year = 1; year <= termYears && balance > 0.5; year++) {
+      let yearPrincipal = 0, yearInterest = 0;
+      for (let m = 0; m < 12 && balance > 0.005; m++) {
+        const interestPortion = balance * monthlyRate;
+        let principalPortion = monthly - interestPortion;
+        if (principalPortion > balance) principalPortion = balance;
+        balance -= principalPortion;
+        yearPrincipal += principalPortion;
+        yearInterest += interestPortion;
+      }
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td>Year ' + year + '</td>' +
+        '<td data-label="Principal paid">AED ' + fmt(yearPrincipal) + '</td>' +
+        '<td data-label="Interest paid">AED ' + fmt(yearInterest) + '</td>' +
+        '<td data-label="Balance remaining">AED ' + fmt(Math.max(balance, 0)) + '</td>';
+      tbody.appendChild(tr);
+    }
+  }
+
   function updateCalc(){
-    const price = parseFloat(document.getElementById('calcPrice').value) || 0;
-    const downPct = parseFloat(document.getElementById('calcDown').value);
+    const priceEl = document.getElementById('calcPrice');
+    const downEl = document.getElementById('calcDown');
+    const residency = document.getElementById('calcResidency').value;
+
+    const price = Math.max(parseFloat(priceEl.value) || 0, 0);
+    const minDownPct = minDownPctFor(residency, price);
+    downEl.min = minDownPct;
+    if (parseFloat(downEl.value) < minDownPct) downEl.value = minDownPct;
+
+    const downPct = parseFloat(downEl.value);
     const term = parseFloat(document.getElementById('calcTerm').value);
     const rate = parseFloat(document.getElementById('calcRate').value);
 
     const downAmt = price * downPct / 100;
     const loan = Math.max(price - downAmt, 0);
+    const ltv = price > 0 ? (loan / price * 100) : 0;
     const monthlyRate = rate / 100 / 12;
     const n = term * 12;
     let monthly;
     if (monthlyRate > 0) {
       monthly = loan * monthlyRate * Math.pow(1 + monthlyRate, n) / (Math.pow(1 + monthlyRate, n) - 1);
     } else {
-      monthly = loan / n;
+      monthly = n > 0 ? loan / n : 0;
     }
     const totalPay = monthly * n;
     const totalInterest = totalPay - loan;
@@ -771,11 +881,34 @@
     document.getElementById('calcRateVal').textContent = rate.toFixed(1);
     document.getElementById('calcMonthly').textContent = fmt(monthly);
     document.getElementById('calcLoanAmt').textContent = 'AED ' + fmt(loan);
+    document.getElementById('calcLTV').textContent = ltv.toFixed(0) + '%';
     document.getElementById('calcTotalInterest').textContent = 'AED ' + fmt(totalInterest);
     document.getElementById('calcTotalPay').textContent = 'AED ' + fmt(totalPay);
+
+    const hint = document.getElementById('calcDownHint');
+    const groupLabel = residency === 'nonresident' ? 'non-residents' : 'UAE/GCC nationals and residents';
+    const priceLabel = price > CALC_PRICE_THRESHOLD ? 'above AED 5,000,000' : 'up to AED 5,000,000';
+    hint.textContent = 'Minimum down payment for ' + groupLabel + ' is ' + minDownPct + '% on properties ' + priceLabel + '.';
+    hint.classList.add('show');
+
+    const dld = price * 0.04 + 580;
+    const mortReg = loan * 0.0025 + 290;
+    const valuation = 3000;
+    const bankFee = loan * 0.01;
+    const totalCash = downAmt + dld + mortReg + valuation + bankFee;
+
+    document.getElementById('ccDown').textContent = 'AED ' + fmt(downAmt);
+    document.getElementById('ccDld').textContent = 'AED ' + fmt(dld);
+    document.getElementById('ccMortReg').textContent = 'AED ' + fmt(mortReg);
+    document.getElementById('ccValuation').textContent = 'AED ' + fmt(valuation);
+    document.getElementById('ccBankFee').textContent = 'AED ' + fmt(bankFee);
+    document.getElementById('ccTotal').textContent = 'AED ' + fmt(totalCash);
+
+    buildAmortization(loan, monthlyRate, n, monthly, term);
   }
-  ['calcPrice','calcDown','calcTerm','calcRate'].forEach(id => {
+  ['calcPrice','calcDown','calcTerm','calcRate','calcResidency'].forEach(id => {
     document.getElementById(id).addEventListener('input', updateCalc);
+    document.getElementById(id).addEventListener('change', updateCalc);
   });
   updateCalc();
 </script>

@@ -104,7 +104,14 @@
   .refresh-btn svg{width:18px;height:18px;transition:transform .4s ease;}
 
   /* HERO */
-  .hero{background:radial-gradient(1100px 600px at 80% -10%, rgba(201,154,60,0.18), transparent 60%), linear-gradient(180deg,var(--navy-950),var(--navy-900) 60%, var(--navy-800));color:var(--white);padding:88px 0 110px;}
+  .hero{position:relative;overflow:hidden;background:radial-gradient(1100px 600px at 80% -10%, rgba(201,154,60,0.18), transparent 60%), linear-gradient(180deg,var(--navy-950),var(--navy-900) 60%, var(--navy-800));color:var(--white);padding:88px 0 110px;}
+  /* The skyline is drawn on a transparent canvas over the gradient, so if WebGL is
+     unavailable or the script fails the hero simply stays as it was. */
+  .hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.4s ease;}
+  .hero-canvas.is-ready{opacity:1;}
+  /* Keeps the headline legible over the towers without dimming the skyline itself. */
+  .hero-scrim{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(100deg, var(--navy-950) 0%, rgba(8,18,38,0.82) 34%, rgba(8,18,38,0.35) 56%, rgba(8,18,38,0) 78%);}
+  .hero-grid{position:relative;z-index:1;}
   .hero-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:center;}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(201,154,60,0.14);border:1px solid rgba(201,154,60,0.35);color:var(--gold-400);font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;margin-bottom:22px;}
   .hero h1{font-size:46px;line-height:1.15;font-weight:800;margin:0 0 20px;letter-spacing:-0.5px;}
@@ -394,6 +401,8 @@
 
 <main>
 <section class="hero" id="top">
+  <canvas id="skylineCanvas" class="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero-scrim" aria-hidden="true"></div>
   <div class="wrap hero-grid">
     <div>
       <div class="eyebrow">● Mortgage advisory, done for you</div>
@@ -950,6 +959,11 @@
   </div>
 </footer>
 
+<!-- Vendored rather than pulled from a CDN: no third-party dependency at runtime,
+     and it can be verified locally before it ships. Loaded without defer so THREE is
+     defined by the time the inline script below runs; the script itself is only a few
+     hundred KB and the hero renders from CSS regardless of whether it arrives. -->
+<script src="three.min.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
   const toggle = document.getElementById('menuToggle');
@@ -962,6 +976,233 @@
     links.classList.remove('open');
     document.body.classList.remove('menu-open');
   }));
+
+  /* ---- Dubai skyline -----------------------------------------------------
+     A procedural night skyline behind the hero, with the Burj Khalifa's tiered,
+     spiralling setbacks as the centrepiece. Built from geometry rather than an
+     imported model: nothing to license, and it stays a few kilobytes of code.
+
+     This is strictly additive. The canvas is transparent and sits over the existing
+     gradient, so every failure path — no WebGL, script blocked, reduced motion,
+     small screen — simply leaves the hero exactly as it was. */
+  (function initSkyline(){
+    const canvas = document.getElementById('skylineCanvas');
+    if (!canvas || typeof THREE === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Phones get the gradient alone: the hero stacks there, the skyline would sit
+    // behind text, and a render loop is not worth the battery.
+    if (window.innerWidth < 900) return;
+
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+    } catch (e) { return; }
+    if (!renderer || !renderer.getContext()) return;
+
+    const NAVY = 0x0b1a33, GOLD = 0xc99a3c;
+    const scene = new THREE.Scene();
+    // Fog is applied on view depth, not distance from the camera. With the camera
+    // 780 units back, a far plane of 900 put the entire city past full fog and
+    // flattened it to the fog colour — only the nearer Burj kept any material. The
+    // range now starts beyond the front of the city so depth reads as haze.
+    scene.fog = new THREE.Fog(0x0d1a30, 820, 2400);
+
+    // Framed to fit the full height of the tower: at 42deg the visible extent is
+    // 2*d*tan(21deg), so a ~460 unit spire needs roughly 700 units of distance.
+    const camera = new THREE.PerspectiveCamera(42, 1, 1, 3000);
+    camera.position.set(0, 190, 780);
+    camera.lookAt(90, 210, 0);
+
+    // Silhouette first, light second: the towers read as architecture, not as boxes.
+    // Lit so no tower falls to pure black: a single raking key left the Burj bright
+    // and everything behind it in silhouette, which read as a mistake rather than
+    // as depth. Ambient and hemisphere carry the base tone, the directionals shape it.
+    scene.add(new THREE.AmbientLight(0x2b3a5c, 0.55));
+    const bounce = new THREE.HemisphereLight(0x33486f, 0x0c1526, 0.5);
+    scene.add(bounce);
+    const key = new THREE.DirectionalLight(0xe0b878, 1.05);
+    key.position.set(420, 380, 420);
+    scene.add(key);
+    const fill = new THREE.DirectionalLight(0x4a6fa8, 0.45);
+    fill.position.set(-500, 300, 380);
+    scene.add(fill);
+
+    // Metalness stays near zero: without an environment map a metallic surface has
+    // nothing to reflect and renders almost black, which is what flattened the first
+    // version of this skyline into a silhouette.
+    const towerMat = new THREE.MeshStandardMaterial({ color: 0x1b2c4e, roughness: 0.85, metalness: 0.04 });
+    const spireMat = new THREE.MeshStandardMaterial({ color: 0x3f5a86, roughness: 0.5, metalness: 0.1 });
+
+    const city = new THREE.Group();
+    scene.add(city);
+
+    // --- Burj Khalifa: three wings around a core, stepping back and rotating as
+    // they climb, finished with the long spire that gives it its silhouette.
+    function buildBurj(){
+      const g = new THREE.Group();
+      // Proportions matter more than detail here. The real tower is roughly three
+      // quarters occupied body and one quarter spire, and the setbacks step in
+      // gently — taper the arms too fast and it reads as a needle rather than a
+      // building, which is exactly what the first attempt did.
+      const tiers = 18;
+      let y = 0;
+      for (let i = 0; i < tiers; i++){
+        const t = i / tiers;
+        const tierH = 19 * (1 - t * 0.3);
+        // Stays wide through the lower half and narrows sharply near the top, which
+        // is the actual profile. A plain power curve gives an even cone instead.
+        const armLen = 62 * (1 - 0.86 * Math.pow(t, 1.4));
+        const armW = 26 * (1 - 0.84 * Math.pow(t, 1.5));
+        const spin = t * 0.9;
+        for (let w = 0; w < 3; w++){
+          const a = spin + w * (Math.PI * 2 / 3);
+          const box = new THREE.Mesh(new THREE.BoxGeometry(armW, tierH, armLen), towerMat);
+          box.position.set(Math.cos(a) * armLen * 0.4, y + tierH / 2, Math.sin(a) * armLen * 0.4);
+          box.rotation.y = -a;
+          g.add(box);
+        }
+        const core = new THREE.Mesh(new THREE.CylinderGeometry(armW * 0.72, armW * 0.78, tierH, 6), towerMat);
+        core.position.y = y + tierH / 2;
+        core.rotation.y = spin;
+        g.add(core);
+        y += tierH;
+      }
+      const spire = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 7, 105, 10), spireMat);
+      spire.position.y = y + 52;
+      g.add(spire);
+      const tip = new THREE.Mesh(new THREE.SphereGeometry(2.4, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xf0d494 }));
+      tip.position.y = y + 107;
+      g.add(tip);
+      return g;
+    }
+
+    // Sits to the right of centre so it clears the hero copy, and far enough right
+    // that the tapering silhouette reads beside the comparison card rather than
+    // behind it. The spire still rises well above everything in frame.
+    const burj = buildBurj();
+    burj.position.set(430, 0, 20);
+    city.add(burj);
+
+    // --- Supporting skyline. Seeded so the composition is the same on every load
+    // rather than occasionally arranging itself badly.
+    let seed = 20240904;
+    function rnd(){ seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+
+    // Spread wide enough to fill the frame edge to edge — clustered towers read as a
+    // small island floating in the middle rather than as a city.
+    const blocks = [], caps = [];
+    for (let i = 0; i < 150; i++){
+      const far = rnd();
+      const w = 20 + rnd() * 42;
+      const d = 20 + rnd() * 42;
+      const h = 40 + Math.pow(rnd(), 1.5) * 300 * (1 - far * 0.4);
+      const x = (rnd() - 0.5) * 2600;
+      const z = -40 - far * 900 - rnd() * 140;
+      const rot = rnd() * 0.7;
+      const lit = h > 210 && rnd() > 0.5;
+      // Leave air around the Burj so its silhouette is not lost in the cluster.
+      if (Math.abs(x - 430) < 130 && z > -320) continue;
+      blocks.push({ x: x, y: h / 2, z: z, w: w, h: h, d: d, rot: rot });
+      if (lit) caps.push({ x: x, y: h + 4, z: z });
+    }
+
+    // One instanced draw call for the whole city rather than one per building: as
+    // separate meshes this was around 200 draw calls a frame, which is the kind of
+    // cost that makes a background animation worth removing rather than shipping.
+    const unitBox = new THREE.BoxGeometry(1, 1, 1);
+    const cityMesh = new THREE.InstancedMesh(unitBox, towerMat, blocks.length);
+    const mat4 = new THREE.Matrix4(), quat = new THREE.Quaternion();
+    const vPos = new THREE.Vector3(), vScale = new THREE.Vector3(), euler = new THREE.Euler();
+    blocks.forEach(function(b, i){
+      euler.set(0, b.rot, 0);
+      quat.setFromEuler(euler);
+      vPos.set(b.x, b.y, b.z);
+      vScale.set(b.w, b.h, b.d);
+      mat4.compose(vPos, quat, vScale);
+      cityMesh.setMatrixAt(i, mat4);
+    });
+    cityMesh.instanceMatrix.needsUpdate = true;
+    city.add(cityMesh);
+
+    if (caps.length){
+      const capGeo = new THREE.SphereGeometry(2.2, 6, 6);
+      const capMesh = new THREE.InstancedMesh(capGeo, new THREE.MeshBasicMaterial({ color: 0xd9b25c }), caps.length);
+      caps.forEach(function(c, i){
+        mat4.identity().setPosition(c.x, c.y, c.z);
+        capMesh.setMatrixAt(i, mat4);
+      });
+      capMesh.instanceMatrix.needsUpdate = true;
+      city.add(capMesh);
+    }
+
+    // --- Star field, thinned towards the horizon so it reads as haze near the city.
+    const starGeo = new THREE.BufferGeometry();
+    const starCount = 900, starPos = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++){
+      starPos[i*3]     = (rnd() - 0.5) * 2400;
+      starPos[i*3 + 1] = 120 + Math.pow(rnd(), 0.6) * 900;
+      starPos[i*3 + 2] = -300 - rnd() * 1200;
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({
+      color: 0xbfd0ea, size: 2.1, sizeAttenuation: true, transparent: true, opacity: 0.62
+    }));
+    scene.add(stars);
+
+    function resize(){
+      const w = canvas.clientWidth || canvas.offsetWidth;
+      const h = canvas.clientHeight || canvas.offsetHeight;
+      if (!w || !h) return;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Only render while the hero is actually on screen — no point burning a GPU
+    // loop behind the FAQ.
+    let visible = true;
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        visible = entries[0].isIntersecting;
+      }, { threshold: 0 }).observe(document.querySelector('.hero'));
+    }
+
+    let scrollY = 0, pointerX = 0, targetPointerX = 0;
+    window.addEventListener('scroll', function(){ scrollY = window.scrollY; }, { passive: true });
+    window.addEventListener('pointermove', function(e){
+      targetPointerX = (e.clientX / window.innerWidth - 0.5);
+    }, { passive: true });
+
+    const clock = new THREE.Clock();
+    let raf;
+    function frame(){
+      raf = requestAnimationFrame(frame);
+      if (!visible) return;
+      const t = clock.getElapsedTime();
+      pointerX += (targetPointerX - pointerX) * 0.035;
+      // A slow drift, a touch of pointer parallax, and the skyline sinking as the
+      // reader scrolls past it.
+      city.rotation.y = -0.16 + Math.sin(t * 0.045) * 0.04 + pointerX * 0.07;
+      camera.position.x = pointerX * 34;
+      camera.position.y = 190 + Math.min(scrollY, 700) * 0.18;
+      camera.lookAt(90, 210 - Math.min(scrollY, 700) * 0.06, 0);
+      stars.rotation.y = t * 0.006;
+      renderer.render(scene, camera);
+    }
+    frame();
+
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) { cancelAnimationFrame(raf); }
+      else { raf = requestAnimationFrame(frame); }
+    });
+
+    // Fade in only once there is something to show.
+    requestAnimationFrame(function(){ canvas.classList.add('is-ready'); });
+  })();
 
   /* ---- Scroll motion ----------------------------------------------------
      Reveal classes are applied from JS, never in the markup, so that if this

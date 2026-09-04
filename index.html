@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Manzil — Your One-Step Mortgage Solution</title>
 <meta name="description" content="Project Manzil finds you the best property mortgage deal and negotiates with banks on your behalf, with a clear timeline every step of the way.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c99a3c'/%3E%3Ctext x='16' y='23' font-family='Times New Roman,serif' font-size='20' font-weight='bold' fill='%23081226' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
 <style>
   :root{
     --navy-950:#081226;
@@ -23,8 +24,40 @@
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
+
+  /* SCROLL MOTION — elements enter as they come into view.
+     Columns alternate in from the left and right; cards lift with a 3D tilt. */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform;}
+  .reveal-left{transform:translateX(-56px);}
+  .reveal-right{transform:translateX(56px);}
+  .reveal-scale{transform:scale(.93);}
+  .reveal-tilt{transform:perspective(1200px) rotateX(9deg) translateY(40px);transform-origin:50% 100%;}
+  .reveal.is-visible{opacity:1;transform:none;}
+
+  /* Depth on the card grids: a subtle lift and 3D tilt toward the cursor. */
+  .lift{transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s ease;}
+  .lift:hover{transform:translateY(-6px) scale(1.014);box-shadow:0 22px 48px rgba(11,26,51,0.16);}
+  .band-dark .lift:hover{box-shadow:0 22px 48px rgba(0,0,0,0.4);}
+
+  /* Keep the sideways travel inside the page gutter on small screens, so browsers
+     without overflow:clip support still never show a horizontal scrollbar. */
+  @media (max-width: 700px){
+    .reveal-left{transform:translateX(-22px);}
+    .reveal-right{transform:translateX(22px);}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1;transform:none;transition:none;}
+    .lift{transition:none;}
+    .lift:hover{transform:none;}
+  }
   body{
     margin:0;
+    /* Reveal animations translate elements sideways before they land; clip stops that
+       creating a horizontal scrollbar. 'clip' rather than 'hidden' so it does not
+       become a scroll container and break the sticky header. */
+    overflow-x:clip;
     font-family:'Times New Roman',Times,serif;
     color:var(--ink);
     background:var(--bg);
@@ -86,6 +119,9 @@
   .hero-stat .hs-label{font-size:12.5px;color:rgba(255,255,255,0.62);}
 
   .hero-card{background:var(--white);border-radius:18px;padding:26px;box-shadow:0 30px 60px rgba(0,0,0,0.35);color:var(--ink);}
+  /* Composes with the reveal: once revealed, the card follows the parallax offset.
+     Must stay after .reveal.is-visible to win on equal specificity. */
+  .hero-card.is-visible{transform:translateY(var(--py,0px));}
   .hero-card h2{margin:0 0 4px;font-size:15px;color:var(--muted);font-weight:600;}
   .hero-card .big{font-size:26px;font-weight:800;margin:0 0 18px;}
   .compare-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-size:14px;}
@@ -149,6 +185,12 @@
   .calc-cost-row .cc-label{color:var(--muted);}
   .calc-cost-row .cc-val{font-weight:600;color:var(--navy-900);white-space:nowrap;}
   .calc-cost-total{display:flex;justify-content:space-between;gap:10px;padding-top:14px;margin-top:4px;border-top:2px solid var(--navy-900);font-weight:800;font-size:15px;color:var(--navy-900);}
+
+  .afford-block{margin-top:48px;padding-top:44px;border-top:1px solid var(--line);}
+  .afford-head{max-width:640px;margin:0 auto 28px;text-align:center;}
+  .afford-head h3{font-size:26px;font-weight:800;margin:0 0 12px;letter-spacing:-0.3px;color:var(--ink);}
+  .afford-head p{color:var(--muted);font-size:15px;margin:0;}
+  .calc-binding{margin-top:16px;padding:12px 14px;border-radius:10px;background:rgba(201,154,60,0.16);border:1px solid rgba(201,154,60,0.4);color:var(--gold-400);font-size:13px;line-height:1.5;}
 
   .amort-toggle{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700;font-size:14px;color:var(--navy-900);padding:2px 0 4px;}
   .amort-toggle::-webkit-details-marker{display:none;}
@@ -450,16 +492,25 @@
           <input type="number" id="calcPrice" value="1500000" min="100000" step="10000">
         </div>
         <div class="field">
-          <label for="calcResidency">Residency status</label>
-          <select id="calcResidency">
-            <option value="resident" selected>UAE / GCC national or resident</option>
-            <option value="nonresident">Non-resident</option>
+          <label for="calcBuyer">Buyer type</label>
+          <select id="calcBuyer">
+            <option value="national">UAE national</option>
+            <option value="expat" selected>Expat resident (living in the UAE)</option>
+            <option value="nonresident">Non-resident (buying from overseas)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="calcPropType">Property type</label>
+          <select id="calcPropType">
+            <option value="first" selected>First home — completed property</option>
+            <option value="second">Second / investment property</option>
+            <option value="offplan">Off-plan (under construction)</option>
           </select>
         </div>
         <div class="field">
           <label for="calcDown">Down payment</label>
-          <input type="range" id="calcDown" min="20" max="80" value="20" step="1">
-          <div class="calc-range-value"><span id="calcDownPct">20</span>% — AED <span id="calcDownAmt">300,000</span></div>
+          <input type="range" id="calcDown" min="25" max="80" value="25" step="1">
+          <div class="calc-range-value"><span id="calcDownPct">25</span>% — AED <span id="calcDownAmt">375,000</span></div>
           <div class="calc-hint" id="calcDownHint"></div>
         </div>
         <div class="field">
@@ -509,7 +560,65 @@
       </div>
     </div>
 
-    <p class="tl-note" style="margin-top:24px;">Estimate only — actual rate, eligibility, fees, and monthly payment depend on the bank, your profile, and current market conditions.</p>
+    <div class="afford-block">
+      <div class="afford-head">
+        <div class="kicker">Borrowing power</div>
+        <h3>How much can you actually borrow?</h3>
+        <p>UAE Central Bank rules cap your total monthly debt at 50% of gross income — the Debt Burden Ratio. Existing commitments reduce what's left for a mortgage, and a credit card counts against you on its <em>limit</em>, not your balance. Uses the buyer type, term and rate you set above.</p>
+      </div>
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <div class="field">
+            <label for="affIncome">Gross monthly income (AED)</label>
+            <input type="number" id="affIncome" value="35000" min="0" step="1000">
+          </div>
+          <div class="field">
+            <label for="affCardLimit">Total credit card limit (AED)</label>
+            <input type="number" id="affCardLimit" value="50000" min="0" step="5000">
+            <div class="calc-range-value">Banks count 5% of your limit as a monthly commitment — even at a zero balance.</div>
+          </div>
+          <div class="field">
+            <label for="affCarLoan">Car loan — monthly instalment (AED)</label>
+            <input type="number" id="affCarLoan" value="0" min="0" step="500">
+          </div>
+          <div class="field">
+            <label for="affOther">Other monthly commitments (AED)</label>
+            <input type="number" id="affOther" value="0" min="0" step="500">
+            <div class="calc-range-value">Personal loans, existing mortgages, school-fee loans, guarantees.</div>
+          </div>
+        </div>
+        <div class="calc-result">
+          <h3>You could borrow up to</h3>
+          <p class="calc-big">AED <span id="affMaxLoan">0</span></p>
+          <div class="compare-row"><span class="bank">Property price it supports</span><span class="rate" id="affMaxPrice">—</span></div>
+          <div class="compare-row"><span class="bank">Monthly payment at that loan</span><span class="rate" id="affMonthly">—</span></div>
+          <div class="compare-row"><span class="bank">Room left in your DBR</span><span class="rate" id="affRoom">—</span></div>
+          <div class="calc-binding" id="affBinding">—</div>
+          <a href="#contact" class="btn btn-primary" style="width:100%;margin-top:18px;">Check my real eligibility</a>
+        </div>
+      </div>
+
+      <div class="calc-extra">
+        <div class="calc-card">
+          <h3>Which limit is holding you back</h3>
+          <p class="calc-card-sub">A UAE bank applies all three of these and lends you the lowest. Whichever is smallest is your real ceiling.</p>
+          <div class="calc-cost-row"><span class="cc-label">1. Debt Burden Ratio (50% of income)</span><span class="cc-val" id="limDbr">—</span></div>
+          <div class="calc-cost-row"><span class="cc-label">2. Income multiple cap</span><span class="cc-val" id="limIncome">—</span></div>
+          <div class="calc-cost-row"><span class="cc-label">3. Loan-to-value cap on this property</span><span class="cc-val" id="limLtv">—</span></div>
+          <div class="calc-cost-total"><span>Your ceiling</span><span id="limCeiling">—</span></div>
+        </div>
+        <div class="calc-card">
+          <h3>What your commitments cost you</h3>
+          <p class="calc-card-sub">How much borrowing power each existing commitment removes, at the term and rate above.</p>
+          <div class="calc-cost-row"><span class="cc-label">Credit card limit (5% counted)</span><span class="cc-val" id="impCard">—</span></div>
+          <div class="calc-cost-row"><span class="cc-label">Car loan</span><span class="cc-val" id="impCar">—</span></div>
+          <div class="calc-cost-row"><span class="cc-label">Other commitments</span><span class="cc-val" id="impOther">—</span></div>
+          <div class="calc-cost-total"><span>Borrowing power lost</span><span id="impTotal">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="tl-note" style="margin-top:24px;">Estimate only — actual rate, eligibility, fees, and monthly payment depend on the bank, your profile, and current market conditions. LTV caps and the 50% debt burden ratio follow CBUAE Regulation No. 31/2013; individual banks often apply stricter limits of their own.</p>
   </div>
 </section>
 
@@ -812,16 +921,139 @@
     document.body.classList.remove('menu-open');
   }));
 
+  /* ---- Scroll motion ----------------------------------------------------
+     Reveal classes are applied from JS, never in the markup, so that if this
+     script fails the page still renders fully visible rather than blank. */
+  (function initScrollMotion(){
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // 'sides' derives direction from where the element actually sits in its row,
+    // so left-hand columns enter from the left and right-hand ones from the right.
+    const plans = [
+      { sel: '.hero-grid > div:first-child > *', type: 'up',    stagger: 80 },
+      { sel: '.hero-card',                       type: 'right'  },
+      { sel: '.section-head',                    type: 'up'     },
+      { sel: '.steps > .step-card',              type: 'sides', stagger: 70 },
+      { sel: '.timeline',                        type: 'scale'  },
+      { sel: '.services-grid > .service-card',   type: 'sides', stagger: 70 },
+      { sel: '.calc-inputs',                     type: 'left'   },
+      { sel: '.calc-result',                     type: 'right'  },
+      { sel: '.calc-extra > .calc-card',         type: 'sides', stagger: 90 },
+      { sel: '.afford-head',                     type: 'up'     },
+      { sel: '.bank-badges > .bank-badge',       type: 'sides', stagger: 45 },
+      { sel: '.features > .feature-card',        type: 'sides', stagger: 70 },
+      { sel: '.testimonials-grid > .testimonial-card', type: 'sides', stagger: 80 },
+      { sel: '.faq-cat',                         type: 'up',    stagger: 60 },
+      { sel: '.contact-info',                    type: 'left'   },
+      { sel: '.form-card',                       type: 'right'  },
+      { sel: 'footer .footer-grid > *',          type: 'up',    stagger: 80 }
+    ];
+
+    const classFor = { up: '', left: 'reveal-left', right: 'reveal-right', scale: 'reveal-scale', tilt: 'reveal-tilt' };
+
+    plans.forEach(plan => {
+      const nodes = Array.from(document.querySelectorAll(plan.sel));
+      if (!nodes.length) return;
+      nodes.forEach(el => {
+        let type = plan.type;
+        const parent = el.parentElement;
+        const pRect = parent.getBoundingClientRect();
+        const rect = el.getBoundingClientRect();
+        if (type === 'sides') {
+          const offset = (rect.left + rect.width / 2) - (pRect.left + pRect.width / 2);
+          // Single-column layouts leave everything near the centre — rise instead.
+          type = Math.abs(offset) < pRect.width * 0.12 ? 'up' : (offset < 0 ? 'left' : 'right');
+        }
+        el.classList.add('reveal');
+        if (classFor[type]) el.classList.add(classFor[type]);
+        // Stagger across each visual row, so wrapped grids restart cleanly.
+        if (plan.stagger) {
+          const row = nodes.filter(n => Math.abs(n.getBoundingClientRect().top - rect.top) < 8);
+          el.style.transitionDelay = (row.indexOf(el) * plan.stagger) + 'ms';
+        }
+      });
+    });
+
+    // A reveal must never be able to strand content invisible. Rather than relying on
+    // an element intersecting the viewport (which never happens if the reader jumps
+    // past it via an anchor link or a scrollbar drag), reveal anything at or above the
+    // fold — including anything already scrolled past.
+    let pending = Array.from(document.querySelectorAll('.reveal'));
+    let ticking = false;
+    function revealPass(){
+      const limit = window.innerHeight * 0.92;
+      pending = pending.filter(el => {
+        if (el.getBoundingClientRect().top >= limit) return true;
+        el.classList.add('is-visible');
+        return false;
+      });
+      if (!pending.length) {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+      }
+    }
+    function onScroll(){
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { revealPass(); ticking = false; });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    revealPass();
+
+    // Give the card grids a cursor-following 3D tilt on pointer devices.
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      document.querySelectorAll('.step-card, .service-card, .feature-card, .testimonial-card, .bank-badge')
+        .forEach(el => el.classList.add('lift'));
+    }
+
+    // Hero depth: the comparison card drifts slower than the copy beside it.
+    const heroCard = document.querySelector('.hero-card');
+    if (heroCard && window.innerWidth > 880) {
+      let parallaxTicking = false;
+      window.addEventListener('scroll', () => {
+        if (parallaxTicking) return;
+        parallaxTicking = true;
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          if (y < 900) heroCard.style.setProperty('--py', (y * -0.06).toFixed(2) + 'px');
+          parallaxTicking = false;
+        });
+      }, { passive: true });
+    }
+  })();
+
   function fmt(n){ return Math.round(n).toLocaleString('en-US'); }
 
+  // LTV caps follow CBUAE Regulation No. 31/2013. Non-resident figures are not set by
+  // the Central Bank — they reflect typical UAE bank policy and are labelled as such.
   const CALC_PRICE_THRESHOLD = 5000000;
-  const CALC_MIN_DOWN = {
-    resident: { under: 20, over: 30 },
-    nonresident: { under: 25, over: 35 }
+  const BUYER_RULES = {
+    national:    { label: 'UAE nationals',   incomeMultiple: 8, first: { under: 80, over: 70 }, second: 65, offplan: 50, regulated: true },
+    expat:       { label: 'expat residents', incomeMultiple: 7, first: { under: 75, over: 65 }, second: 60, offplan: 50, regulated: true },
+    nonresident: { label: 'non-residents',   incomeMultiple: 7, first: { under: 65, over: 60 }, second: 60, offplan: 50, regulated: false }
   };
-  function minDownPctFor(residency, price){
-    const rule = CALC_MIN_DOWN[residency] || CALC_MIN_DOWN.resident;
-    return price > CALC_PRICE_THRESHOLD ? rule.over : rule.under;
+
+  function maxLtvFor(buyer, propType, price){
+    const rule = BUYER_RULES[buyer] || BUYER_RULES.expat;
+    if (propType === 'offplan') return rule.offplan;
+    if (propType === 'second') return rule.second;
+    return price > CALC_PRICE_THRESHOLD ? rule.first.over : rule.first.under;
+  }
+
+  // Present value of an annuity: the largest loan a given monthly payment can service.
+  function loanFromPayment(payment, monthlyRate, months){
+    if (payment <= 0 || months <= 0) return 0;
+    if (monthlyRate <= 0) return payment * months;
+    return payment * (1 - Math.pow(1 + monthlyRate, -months)) / monthlyRate;
+  }
+
+  // Standard amortising payment for a given loan.
+  function paymentFromLoan(loan, monthlyRate, months){
+    if (loan <= 0 || months <= 0) return 0;
+    if (monthlyRate <= 0) return loan / months;
+    const growth = Math.pow(1 + monthlyRate, months);
+    return loan * monthlyRate * growth / (growth - 1);
   }
 
   function buildAmortization(loan, monthlyRate, months, monthly, termYears){
@@ -850,12 +1082,20 @@
   function updateCalc(){
     const priceEl = document.getElementById('calcPrice');
     const downEl = document.getElementById('calcDown');
-    const residency = document.getElementById('calcResidency').value;
+    const buyer = document.getElementById('calcBuyer').value;
+    const propType = document.getElementById('calcPropType').value;
 
     const price = Math.max(parseFloat(priceEl.value) || 0, 0);
-    const minDownPct = minDownPctFor(residency, price);
+    const maxLtv = maxLtvFor(buyer, propType, price);
+    const minDownPct = 100 - maxLtv;
     downEl.min = minDownPct;
-    if (parseFloat(downEl.value) < minDownPct) downEl.value = minDownPct;
+    // Until the buyer sets a deposit themselves, track the regulatory minimum in both
+    // directions. Once they've moved the slider, only ever clamp upward.
+    if (!downEl.dataset.touched) {
+      downEl.value = minDownPct;
+    } else if (parseFloat(downEl.value) < minDownPct) {
+      downEl.value = minDownPct;
+    }
 
     const downPct = parseFloat(downEl.value);
     const term = parseFloat(document.getElementById('calcTerm').value);
@@ -886,9 +1126,18 @@
     document.getElementById('calcTotalPay').textContent = 'AED ' + fmt(totalPay);
 
     const hint = document.getElementById('calcDownHint');
-    const groupLabel = residency === 'nonresident' ? 'non-residents' : 'UAE/GCC nationals and residents';
-    const priceLabel = price > CALC_PRICE_THRESHOLD ? 'above AED 5,000,000' : 'up to AED 5,000,000';
-    hint.textContent = 'Minimum down payment for ' + groupLabel + ' is ' + minDownPct + '% on properties ' + priceLabel + '.';
+    const rule = BUYER_RULES[buyer] || BUYER_RULES.expat;
+    let reason;
+    if (propType === 'offplan') {
+      reason = 'Off-plan property is capped at 50% loan-to-value for every buyer';
+    } else if (propType === 'second') {
+      reason = 'A second or investment property is capped at ' + maxLtv + '% loan-to-value for ' + rule.label;
+    } else {
+      reason = 'A first home ' + (price > CALC_PRICE_THRESHOLD ? 'above' : 'up to') +
+               ' AED 5,000,000 is capped at ' + maxLtv + '% loan-to-value for ' + rule.label;
+    }
+    hint.textContent = reason + ', so the minimum down payment is ' + minDownPct + '%. ' +
+      (rule.regulated ? 'This is a UAE Central Bank cap.' : 'Non-resident limits are set by each bank, not the Central Bank — treat this as typical.');
     hint.classList.add('show');
 
     const dld = price * 0.04 + 580;
@@ -905,11 +1154,69 @@
     document.getElementById('ccTotal').textContent = 'AED ' + fmt(totalCash);
 
     buildAmortization(loan, monthlyRate, n, monthly, term);
+    updateAffordability(buyer, maxLtv, monthlyRate, n);
   }
-  ['calcPrice','calcDown','calcTerm','calcRate','calcResidency'].forEach(id => {
+
+  const DBR_CAP = 0.50;          // CBUAE: total monthly debt <= 50% of gross income
+  const CARD_LIMIT_FACTOR = 0.05; // UAE banks count 5% of the card limit as a monthly commitment
+
+  function updateAffordability(buyer, maxLtv, monthlyRate, months){
+    const rule = BUYER_RULES[buyer] || BUYER_RULES.expat;
+    const income = Math.max(parseFloat(document.getElementById('affIncome').value) || 0, 0);
+    const cardLimit = Math.max(parseFloat(document.getElementById('affCardLimit').value) || 0, 0);
+    const carLoan = Math.max(parseFloat(document.getElementById('affCarLoan').value) || 0, 0);
+    const other = Math.max(parseFloat(document.getElementById('affOther').value) || 0, 0);
+
+    const cardObligation = cardLimit * CARD_LIMIT_FACTOR;
+    const commitments = cardObligation + carLoan + other;
+    const dbrCeiling = income * DBR_CAP;
+    const availableForMortgage = Math.max(dbrCeiling - commitments, 0);
+
+    // Three independent ceilings a UAE bank applies; the lowest wins.
+    const loanByDbr = loanFromPayment(availableForMortgage, monthlyRate, months);
+    const loanByIncome = income * 12 * rule.incomeMultiple;
+    // The LTV cap binds the property price, not the loan directly, so express the
+    // affordable loan back as the price it supports and cap that price's loan.
+    const maxLoan = Math.min(loanByDbr, loanByIncome);
+    const maxPrice = maxLtv > 0 ? maxLoan / (maxLtv / 100) : 0;
+    const monthlyAtMax = paymentFromLoan(maxLoan, monthlyRate, months);
+
+    document.getElementById('affMaxLoan').textContent = fmt(maxLoan);
+    document.getElementById('affMaxPrice').textContent = 'AED ' + fmt(maxPrice);
+    document.getElementById('affMonthly').textContent = 'AED ' + fmt(monthlyAtMax);
+    document.getElementById('affRoom').textContent = 'AED ' + fmt(availableForMortgage) + '/mo';
+
+    const binding = document.getElementById('affBinding');
+    if (income <= 0) {
+      binding.textContent = 'Enter your gross monthly income to see your borrowing ceiling.';
+    } else if (availableForMortgage <= 0) {
+      binding.textContent = 'Your existing commitments already use the full 50% debt burden ratio, so no mortgage capacity is left. Reducing or closing a credit card limit is usually the fastest fix.';
+    } else if (loanByIncome < loanByDbr) {
+      binding.textContent = 'Your ceiling is the income multiple — ' + rule.incomeMultiple + '× annual income for ' + rule.label + '. Your income comfortably covers the monthly payment, but the cap on total loan size binds first.';
+    } else {
+      binding.textContent = 'Your ceiling is the 50% debt burden ratio. Of AED ' + fmt(dbrCeiling) + ' of allowed monthly debt, AED ' + fmt(commitments) + ' is already committed, leaving AED ' + fmt(availableForMortgage) + ' for a mortgage.';
+    }
+
+    document.getElementById('limDbr').textContent = 'AED ' + fmt(loanByDbr);
+    document.getElementById('limIncome').textContent = 'AED ' + fmt(loanByIncome) + ' (' + rule.incomeMultiple + '×)';
+    document.getElementById('limLtv').textContent = maxLtv + '% of price';
+    document.getElementById('limCeiling').textContent = 'AED ' + fmt(maxLoan);
+
+    // What each commitment removes, expressed as lost borrowing power.
+    const cardImpact = loanFromPayment(cardObligation, monthlyRate, months);
+    const carImpact = loanFromPayment(carLoan, monthlyRate, months);
+    const otherImpact = loanFromPayment(other, monthlyRate, months);
+    document.getElementById('impCard').textContent = '− AED ' + fmt(cardImpact);
+    document.getElementById('impCar').textContent = '− AED ' + fmt(carImpact);
+    document.getElementById('impOther').textContent = '− AED ' + fmt(otherImpact);
+    document.getElementById('impTotal').textContent = '− AED ' + fmt(cardImpact + carImpact + otherImpact);
+  }
+  ['calcPrice','calcDown','calcTerm','calcRate','calcBuyer','calcPropType',
+   'affIncome','affCardLimit','affCarLoan','affOther'].forEach(id => {
     document.getElementById(id).addEventListener('input', updateCalc);
     document.getElementById(id).addEventListener('change', updateCalc);
   });
+  document.getElementById('calcDown').addEventListener('input', function(){ this.dataset.touched = '1'; });
   updateCalc();
 </script>
 

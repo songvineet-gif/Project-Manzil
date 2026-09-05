@@ -193,6 +193,32 @@ the user confirms they're happy with the current one.
       + handle pill replacing the old placeholder glyph. Form gained a
       "Your details" heading and a friction-reducing subline.
 
+## Lead capture — how it works
+
+The contact form is a Netlify Form named `loan-inquiry`. Form detection was
+OFF until 5 Sep 2026, so nothing submitted before then was ever stored — the
+markup had `data-netlify` but the project setting was disabled, and Netlify
+only registers a form when it is enabled AND a deploy runs afterwards. It is
+now enabled and verified with a real test submission.
+
+Fields captured: name, phone, email, value, message (plus a `bot-field`
+honeypot, which is why spam protection shows as active).
+
+Submissions land in Netlify → Site → Forms. They are NOT in this repo and
+Claude cannot collect them in the background — Claude only runs during a
+session. The workflow when the user asks for the list:
+
+  1. Netlify connector → `manage-form-submissions` / `get-submissions`
+  2. Save that JSON to a file
+  3. `python3 tools/submissions_to_excel.py subs.json "Manzil Properties - Enquiries.xlsx"`
+     (needs openpyxl: `pip install openpyxl` — not preinstalled in this env)
+  4. Send the .xlsx with SendUserFile
+
+The user can also self-serve any time: Netlify dashboard → Forms → Download
+as CSV, which opens directly in Excel.
+
+Submitting redirects to `thank-you.html`.
+
 ## How to work each session
 
 1. Read this file's checklist to see what's next.

@@ -351,7 +351,10 @@
   .ig-icon{display:flex;}
   .ig-icon svg{width:19px;height:19px;display:block;}
   .ig-handle{font-size:13.5px;font-weight:600;letter-spacing:.1px;}
-  .footer-legal{font-size:12.5px;color:rgba(255,255,255,0.56);margin-top:16px;max-width:640px;line-height:1.6;}
+  /* Sized to be read rather than skipped: this is the commission disclosure, and it
+     is the line that tells the customer the service costs them nothing. */
+  .footer-legal{font-size:15px;color:rgba(255,255,255,0.74);margin-top:18px;max-width:760px;line-height:1.65;}
+  .footer-legal strong{font-size:18px;font-weight:800;color:var(--gold-400);letter-spacing:.1px;}
   .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;}
 
   /* Full HD and above: 1120px of content stranded 400px from each edge reads as a
@@ -1196,7 +1199,7 @@
         </div>
       </div>
     </div>
-    <div class="footer-legal">Manzil Properties, a licensed, independent brokerage firm based in Dubai, UAE, may receive a commission from the bank upon successful completion of your mortgage — this service is completely free to you and does not affect the rate or terms offered to you.</div>
+    <div class="footer-legal"><strong>Manzil Properties</strong>, a licensed, independent brokerage firm based in Dubai, UAE, may receive a commission from the bank upon successful completion of your mortgage — this service is completely free to you and does not affect the rate or terms offered to you.</div>
     <div class="footer-bottom">
       <span>© <span id="year"></span> Manzil Properties. All rights reserved.</span>
       <span>Rates shown are bank rates, updated weekly. Your final rate may vary slightly at completion.</span>

@@ -219,6 +219,31 @@ as CSV, which opens directly in Excel.
 
 Submitting redirects to `thank-you.html`.
 
+### Email on submit
+
+Netlify sends the email itself — no code, no third-party mail service, no
+API key. It is a per-form setting in the dashboard, and the Netlify MCP
+connector does **not** expose it (its only write operations are
+update-visitor-access-controls, update-forms, manage-form-submissions,
+update-project-name, manage-env-vars, create-new-project). So Claude cannot
+switch it on; the owner has to click it once:
+
+  Netlify → project `projectmanzil` → **Forms** → form `loan-inquiry` →
+  **Settings & usage** → **Form notifications** → **Add notification** →
+  **Email notification** → Email to notify: `info@manazil.com` → Save.
+
+Direct link: https://app.netlify.com/projects/projectmanzil/forms
+
+Multiple recipients = add one notification per address. Every submission
+then arrives as an email containing all five fields.
+
+If a properly branded email is ever wanted instead of Netlify's plain one,
+the alternative is a `submission-created` Netlify Function calling a mail
+provider (Resend/SendGrid) with the API key stored via `manage-env-vars`.
+That adds a third-party account and a credential to look after, so it is
+not worth it just to receive leads — only if templated/branded mail is
+actually needed.
+
 ## How to work each session
 
 1. Read this file's checklist to see what's next.

@@ -328,9 +328,12 @@
   .form-head p{margin:0;font-size:13.5px;color:var(--muted);}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   .field{margin-bottom:16px;}
-  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--navy-900);}
+  .field label{display:block;font-size:15px;font-weight:700;margin-bottom:7px;color:var(--navy-900);}
+  /* Guidance sits beside the label rather than in the placeholder, which vanishes
+     the moment someone starts typing — exactly when the format still matters. */
+  .field label .hint{font-size:13px;font-weight:400;color:var(--muted);}
   .field input, .field select, .field textarea{
-    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:14.5px;background:#fbfbfc;
+    width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:16px;background:#fbfbfc;
   }
   .field textarea{resize:vertical;min-height:90px;}
   .field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--gold-400);outline-offset:1px;background:#fff;}
@@ -572,7 +575,7 @@
    "name": "Are you a licensed broker?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Yes. Manzil is a licensed, independent mortgage brokerage registered in Dubai, UAE. We're not owned by or exclusively tied to any single bank, so our recommendations are based on what's best for you."
+    "text": "Yes. Manzil Properties is a licensed, independent brokerage firm registered in Dubai, UAE. We're not owned by or exclusively tied to any single bank, so our recommendations are based on what's best for you."
    }
   },
   {
@@ -597,7 +600,7 @@
         <a href="#how">How it works</a>
         <a href="#services">Services</a>
         <a href="#calculator">Calculator</a>
-        <a href="#why">Why Manzil</a>
+        <a href="#why">Why Manzil Properties</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </div>
@@ -656,7 +659,7 @@
     <p class="usp-line">Your one-step solution for property mortgage — <em>the best deals, the clearest timelines, at no cost to you.</em></p>
     <div class="usp-rule"></div>
     <div class="usp-cred">
-      <img class="usp-mark" src="manzil-mark.png" alt="Manzil.DXB" width="50" height="56">
+      <img class="usp-mark" src="manzil-mark.png" alt="Manzil Properties" width="50" height="56">
       <p><strong class="usp-brand">Manzil Properties</strong> — a licensed, independent brokerage firm based in Dubai, UAE.</p>
     </div>
   </div>
@@ -925,7 +928,7 @@
 <section class="band-dark" id="why">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Why Manzil</div>
+      <div class="kicker">Why Manzil Properties</div>
       <h2>Everything you'd have to chase down yourself — done for you.</h2>
       <p>Property mortgages usually mean weeks of calls, comparisons, and paperwork. We turn that into one simple, transparent process.</p>
     </div>
@@ -958,7 +961,7 @@
       <div class="feature-card">
         <div class="feature-icon">🛡️</div>
         <h3>Licensed & independent</h3>
-        <p>Manzil is a licensed, registered mortgage brokerage. We're not tied to any single bank, so our advice is always in your interest.</p>
+        <p>Manzil Properties is a licensed, registered brokerage firm. We're not tied to any single bank, so our advice is always in your interest.</p>
       </div>
     </div>
   </div>
@@ -975,7 +978,7 @@
     <div class="testimonials-grid">
       <div class="testimonial-card">
         <div class="testimonial-stars">★★★★★</div>
-        <p class="quote">"I didn't have to speak to a single bank myself — Manzil handled everything and got me a better rate than I expected."</p>
+        <p class="quote">"I didn't have to speak to a single bank myself — Manzil Properties handled everything and got me a better rate than I expected."</p>
         <div class="testimonial-name">S. Ahmed</div>
         <div class="testimonial-loc">Dubai</div>
       </div>
@@ -1083,7 +1086,7 @@
       <h3>About Us</h3>
       <details class="faq-item">
         <summary>Are you a licensed broker?</summary>
-        <div class="faq-a">Yes. Manzil is a licensed, independent mortgage brokerage registered in Dubai, UAE. We're not owned by or exclusively tied to any single bank, so our recommendations are based on what's best for you.</div>
+        <div class="faq-a">Yes. Manzil Properties is a licensed, independent brokerage firm registered in Dubai, UAE. We're not owned by or exclusively tied to any single bank, so our recommendations are based on what's best for you.</div>
       </details>
       <details class="faq-item">
         <summary>Which banks do you work with?</summary>
@@ -1098,7 +1101,7 @@
     <div class="contact-info">
       <div class="kicker">Get started</div>
       <h2>Get your free loan comparison</h2>
-      <p>Tell us a bit about the property and what you're looking for. We'll come back to you with real options and a timeline built around your situation. Manzil is a licensed, independent mortgage brokerage — our service is completely free for you, as we're paid a commission by the bank once your loan closes.</p>
+      <p>Tell us a bit about the property and what you're looking for. We'll come back to you with real options and a timeline built around your situation. Manzil Properties is a licensed, independent brokerage firm — our service is completely free for you, as we're paid a commission by the bank once your loan closes.</p>
       <div class="contact-detail">
         <div class="ci-icon">✉</div>
         <div><strong>Email us</strong><span>info@manazil.com</span></div>
@@ -1128,12 +1131,12 @@
         </div>
         <div class="form-row">
           <div class="field">
-            <label for="name">Full name</label>
+            <label for="name">Full name <span class="hint">(first and last name)</span></label>
             <input type="text" id="name" name="name" required>
           </div>
           <div class="field">
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone" name="phone" required>
+            <label for="phone">Phone <span class="hint">(with country code)</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+971 50 123 4567" required>
           </div>
         </div>
         <div class="form-row">
@@ -1142,12 +1145,12 @@
             <input type="email" id="email" name="email" required>
           </div>
           <div class="field">
-            <label for="value">Estimated property value</label>
+            <label for="value">Estimated property value <span class="hint">(approximate is fine)</span></label>
             <input type="text" id="value" name="value" placeholder="e.g. AED 1,500,000">
           </div>
         </div>
         <div class="field">
-          <label for="message">Anything else we should know?</label>
+          <label for="message">Anything else we should know? <span class="hint">(optional)</span></label>
           <textarea id="message" name="message" placeholder="Property location, timing, current mortgage status, etc."></textarea>
         </div>
         <button type="submit" class="btn btn-dark" style="width:100%;">Get My Free Loan Comparison</button>
@@ -1182,7 +1185,7 @@
           <h4>Company</h4>
           <a href="#how">How it works</a>
           <a href="#services">Services</a>
-          <a href="#why">Why Manzil</a>
+          <a href="#why">Why Manzil Properties</a>
           <a href="#faq">FAQ</a>
           <a href="#contact">Contact</a>
         </div>

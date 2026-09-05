@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1080px; height: 1350px;
+    font-family: 'Times New Roman', Times, serif;
+    background: linear-gradient(160deg, #081226 0%, #0b1a33 55%, #12274a 100%);
+    overflow: hidden;
+  }
+  .canvas {
+    width: 1080px; height: 1350px;
+    padding: 70px 86px 50px 86px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .kicker-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 46px;
+  }
+  .kicker {
+    color: #d9b25c;
+    font-size: 25px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .kicker-num {
+    color: #8fa0bd;
+    font-size: 25px;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+  .headline {
+    color: #ffffff;
+    font-size: 64px;
+    line-height: 1.14;
+    font-weight: 700;
+    max-width: 900px;
+    margin-bottom: 46px;
+  }
+  .headline .accent { color: #d9b25c; }
+  .card {
+    background: rgba(18,39,74,0.65);
+    border: 1px solid rgba(217,178,92,0.35);
+    border-radius: 26px;
+    padding: 40px 50px;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  }
+  .bullet {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    gap: 22px;
+  }
+  .bullet:last-child { margin-bottom: 0; }
+  .dot {
+    flex: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #d9b25c;
+    margin-top: 10px;
+  }
+  .bullet p {
+    color: #eef2f8;
+    font-size: 33px;
+    line-height: 1.4;
+  }
+  .bullet b { color: #f3d68a; }
+  .footer {
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(217,178,92,0.35);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .footer img { width: 72px; height: 80px; object-fit: contain; }
+  .footer-text .name {
+    color: #f3d68a;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .footer-text .tag {
+    color: #b9c4d6;
+    font-size: 22px;
+    margin-top: 4px;
+  }
+  .footer-handle {
+    margin-left: auto;
+    color: #d9b25c;
+    font-size: 24px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="kicker-row">
+      <div class="kicker">Mortgage Knowledge Series</div>
+      <div class="kicker-num">__NUM__ / __TOTAL__</div>
+    </div>
+    <div class="headline">__HEADLINE__</div>
+    <div class="card">
+      __BULLETS__
+    </div>
+    <div class="footer">
+      <img src="data:image/png;base64,__MARK_B64__">
+      <div class="footer-text">
+        <div class="name">MANZIL PROPERTIES</div>
+        <div class="tag">Free for you, always &middot; licensed &amp; independent</div>
+      </div>
+      <div class="footer-handle">@Manazil.DXB</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+{
+  "_readme": "State manifest for the Instagram/Facebook 'Mortgage Knowledge Series'. Each entry is one day's topic, rendered once to social-assets/series/day-NN.png and scheduled to both networks via Metricool (brandId 6854745). status flips from 'scheduled' to 'posted' only after a human or the routine has confirmed Metricool actually published it -- Metricool's own scheduler does the publishing, this file is just the source-of-truth log. When this batch is close to exhausted, extend this array with new topics (grounded in real, already-verified site figures -- never invented stats) and re-run tools/social_series_generator.py.",
+  "brandId": 6854745,
+  "timezone": "Asia/Dubai",
+  "instagram_handle": "@Manazil.DXB",
+  "whatsapp_display": "+971 50 569 6741",
+  "whatsapp_link": "https://wa.me/971505696741",
+  "site_url": "https://projectmanzil.netlify.app",
+  "ig_post_time": "10:00:00",
+  "fb_post_time": "18:00:00",
+  "hashtags_ig": "#DubaiMortgage #UAEMortgage #MortgageBroker #ManazilProperties #RealEstateDubai #HomeLoanUAE #DubaiRealEstate #MortgageTips #UAEProperty #DubaiHomes",
+  "slides": [
+    {
+      "day": 1,
+      "date": "2026-09-06",
+      "status": "pending",
+      "headline": "What does a mortgage <span class=\"accent\">broker</span> actually do?",
+      "bullets": [
+        "We compare offers across <b>UAE banks</b> for you — not just one.",
+        "We <b>negotiate</b> the rate and terms directly with lenders.",
+        "You see every option side-by-side before you decide."
+      ],
+      "caption_ig": "Ever wondered what a mortgage broker actually does day-to-day? In short: we do the comparing and the negotiating so you don't have to.\n\nInstead of walking into one bank and taking whatever they offer, we shortlist the lenders that fit your profile, negotiate on your behalf, and lay every option out side-by-side so you choose with full visibility.\n\nQuestions about your own situation? DM us or WhatsApp {whatsapp_display}.",
+      "caption_fb": "Ever wondered what a mortgage broker actually does day-to-day? In short: we compare offers across UAE banks and negotiate on your behalf, so you get full visibility on rate, timeline and total cost before you decide — instead of taking whatever one bank offers you.\n\nQuestions about your own situation? WhatsApp us at {whatsapp_display} or visit {site_url}."
+    },
+    {
+      "day": 2,
+      "date": "2026-09-07",
+      "status": "pending",
+      "headline": "Your mortgage journey in <span class=\"accent\">5 steps</span>",
+      "bullets": [
+        "1. Tell us about the property & your finances",
+        "2. We shortlist the right lenders for your profile",
+        "3. We negotiate with the banks on your behalf",
+        "4. You choose — full visibility on rate, timeline, cost",
+        "5. We support you through to closing"
+      ],
+      "caption_ig": "Getting a mortgage sorted doesn't have to mean chasing five different banks yourself. Here's how the process works when you go through us — five steps, start to finish.\n\nSave this for when you're ready to start.\n\nDM us or WhatsApp {whatsapp_display} to begin.",
+      "caption_fb": "Getting a mortgage sorted doesn't have to mean chasing five different banks yourself. Here's how the process works when you go through us — five steps, start to finish, with our team handling the bank calls.\n\nWhatsApp {whatsapp_display} or visit {site_url} to start."
+    },
+    {
+      "day": 3,
+      "date": "2026-09-08",
+      "status": "pending",
+      "headline": "How much <span class=\"accent\">down payment</span> do you really need?",
+      "bullets": [
+        "<b>UAE nationals:</b> 20% down on a first home (30% above AED 5M)",
+        "<b>Expat residents:</b> 25% down on a first home (35% above AED 5M)",
+        "<b>Off-plan property:</b> 50% down, for everyone"
+      ],
+      "caption_ig": "Down payment rules in the UAE aren't one-size-fits-all — they're set by Central Bank Regulation No. 31/2013 and depend on your nationality status and the property itself.\n\nThe short version is in the graphic. Want the exact number for your situation (including second homes and off-plan)? Our calculator on the site runs the full matrix, or just DM us.\n\n{hashtags}",
+      "caption_fb": "Down payment rules in the UAE aren't one-size-fits-all — they're set by Central Bank Regulation No. 31/2013 and depend on your nationality status and the property itself.\n\nWant the exact figure for your situation? Our mortgage calculator at {site_url} runs the full matrix — or WhatsApp us at {whatsapp_display}."
+    },
+    {
+      "day": 4,
+      "date": "2026-09-09",
+      "status": "pending",
+      "headline": "First home vs second property vs <span class=\"accent\">off-plan</span>",
+      "bullets": [
+        "<b>Second property:</b> 35% down for nationals, 40% for expats",
+        "<b>Off-plan:</b> always 50% down, regardless of nationality",
+        "<b>Non-residents:</b> typically 35–40% down — set by bank policy, not the Central Bank"
+      ],
+      "caption_ig": "Your down payment doesn't just depend on who you are — it depends on what you're buying. A second property and an off-plan unit both carry higher down payments than a first home, and non-resident figures come from bank policy rather than a fixed Central Bank rule.\n\nWe'll walk you through exactly what applies to your case — DM us or WhatsApp {whatsapp_display}.\n\n{hashtags}",
+      "caption_fb": "Your down payment doesn't just depend on who you are — it depends on what you're buying. A second property and an off-plan unit both carry higher down payments than a first home, and non-resident figures come from bank policy rather than a fixed Central Bank rule.\n\nWe'll walk you through exactly what applies to your case. WhatsApp {whatsapp_display} or visit {site_url}."
+    },
+    {
+      "day": 5,
+      "date": "2026-09-10",
+      "status": "pending",
+      "headline": "The upfront costs beyond your <span class=\"accent\">down payment</span>",
+      "bullets": [
+        "<b>DLD transfer fee:</b> 4% of the property price + AED 580",
+        "<b>Mortgage registration:</b> 0.25% of the loan + AED 290",
+        "Plus a property <b>valuation fee</b> and the bank's <b>arrangement fee</b>"
+      ],
+      "caption_ig": "The down payment isn't the only cash you need on closing day. Dubai Land Department transfer fees, mortgage registration, valuation and arrangement fees all add up on top.\n\nOur calculator breaks all of it down for your exact numbers — link in bio. Or just message us and we'll walk you through it.\n\n{hashtags}",
+      "caption_fb": "The down payment isn't the only cash you need on closing day. Dubai Land Department transfer fees, mortgage registration, valuation and arrangement fees all add up on top — and it's easy to be caught off guard by them.\n\nOur calculator at {site_url} breaks all of it down for your exact numbers, or WhatsApp {whatsapp_display}."
+    },
+    {
+      "day": 6,
+      "date": "2026-09-11",
+      "status": "pending",
+      "headline": "How much can you <span class=\"accent\">actually</span> borrow?",
+      "bullets": [
+        "UAE banks cap your total monthly debt at <b>50% of gross income</b>",
+        "Credit cards count as <b>5% of your card limit</b> — not your balance",
+        "Whatever's left of that 50% is what can go toward a mortgage"
+      ],
+      "caption_ig": "This is the rule that surprises most first-time buyers: UAE banks count your credit card commitment as 5% of your card LIMIT, not what you actually owe on it. A high limit you never use in full still eats into your borrowing power.\n\nWant to know your real number? Our affordability calculator does the math — link in bio.\n\n{hashtags}",
+      "caption_fb": "This is the rule that surprises most first-time buyers: UAE banks count your credit card commitment as 5% of your card LIMIT, not what you actually owe on it. A high limit you never use in full still eats into your borrowing power.\n\nWant to know your real number? Our affordability calculator at {site_url} does the math, or WhatsApp {whatsapp_display}."
+    },
+    {
+      "day": 7,
+      "date": "2026-09-12",
+      "status": "pending",
+      "headline": "The <span class=\"accent\">income-multiple</span> cap most buyers miss",
+      "bullets": [
+        "<b>UAE nationals:</b> banks cap borrowing at 8x annual income",
+        "<b>Expat residents:</b> the cap is 7x annual income",
+        "Your real limit is the <b>smallest</b> of this, the 50% rule, and the LTV cap"
+      ],
+      "caption_ig": "There isn't just one ceiling on your mortgage — there are three, and the smallest one wins. Alongside the 50% debt-burden rule and the down-payment (LTV) cap, banks also apply an income-multiple cap: 8x annual income for nationals, 7x for expats.\n\nWe check all three for you before you ever talk to a bank. DM us or WhatsApp {whatsapp_display}.\n\n{hashtags}",
+      "caption_fb": "There isn't just one ceiling on your mortgage — there are three, and the smallest one wins. Alongside the 50% debt-burden rule and the down-payment (LTV) cap, banks also apply an income-multiple cap: 8x annual income for nationals, 7x for expats.\n\nWe check all three for you before you ever talk to a bank. WhatsApp {whatsapp_display} or visit {site_url}."
+    },
+    {
+      "day": 8,
+      "date": "2026-09-13",
+      "status": "pending",
+      "headline": "Resident vs <span class=\"accent\">non-resident</span>: how it differs",
+      "bullets": [
+        "Down payments run higher for non-residents — usually 35–40%",
+        "These figures are <b>bank policy</b>, not a Central Bank rule — they vary by lender",
+        "That's exactly where comparing lenders saves you the most"
+      ],
+      "caption_ig": "If you don't live in the UAE, your mortgage math looks a little different — higher down payments, and figures that vary by bank rather than a single fixed rule. That variation is exactly why comparing lenders matters more, not less, for non-residents.\n\nWe work with non-resident buyers regularly — DM us or WhatsApp {whatsapp_display}.\n\n{hashtags}",
+      "caption_fb": "If you don't live in the UAE, your mortgage math looks a little different — higher down payments, and figures that vary by bank rather than a single fixed rule. That variation is exactly why comparing lenders matters more, not less, for non-residents.\n\nWe work with non-resident buyers regularly. WhatsApp {whatsapp_display} or visit {site_url}."
+    },
+    {
+      "day": 9,
+      "date": "2026-09-14",
+      "status": "pending",
+      "headline": "Is <span class=\"accent\">refinancing</span> worth it?",
+      "bullets": [
+        "Refinancing swaps your current mortgage for better rates or terms",
+        "Worth exploring when your rate, life circumstances, or the market has changed",
+        "We compare refinance offers the same way we compare a first mortgage"
+      ],
+      "caption_ig": "Your first mortgage doesn't have to be your last deal. If rates have moved, your income has changed, or you just haven't checked in a while, it's worth seeing what a refinance could do for your monthly payment.\n\nWe run the comparison the same way we do for a first-time buyer — free, no pressure. DM us or WhatsApp {whatsapp_display}.\n\n{hashtags}",
+      "caption_fb": "Your first mortgage doesn't have to be your last deal. If rates have moved, your income has changed, or you just haven't checked in a while, it's worth seeing what a refinance could do for your monthly payment.\n\nWe run the comparison the same way we do for a first-time buyer — free, no pressure. WhatsApp {whatsapp_display} or visit {site_url}."
+    },
+    {
+      "day": 10,
+      "date": "2026-09-15",
+      "status": "pending",
+      "headline": "Why compare instead of going to <span class=\"accent\">one bank</span>?",
+      "bullets": [
+        "One bank shows you one offer. We compare across UAE's leading banks.",
+        "We negotiate on your behalf — you don't make a single call to a bank",
+        "It's <b>free for you</b> — we're paid by the bank on completed loans, not by you"
+      ],
+      "caption_ig": "Walking into one bank means seeing exactly one offer. We compare across UAE's leading banks, negotiate on your behalf, and it costs you nothing — we're paid by the bank on completed loans, not by you.\n\nThat's the whole series for now — ready to see what's possible for you? DM us or WhatsApp {whatsapp_display}.\n\n{hashtags}",
+      "caption_fb": "Walking into one bank means seeing exactly one offer. We compare across UAE's leading banks, negotiate on your behalf, and it costs you nothing — we're paid by the bank on completed loans, not by you.\n\nReady to see what's possible for you? WhatsApp {whatsapp_display} or visit {site_url}."
+    }
+  ]
+}

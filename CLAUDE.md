@@ -86,12 +86,32 @@ Where the user hasn't given real numbers/testimonials/partners yet:
   every push to `main`. No build command, publish directory is repo root.
 - Netlify Forms is wired on the contact form (`data-netlify="true"`) —
   submissions land in the Netlify dashboard under Site → Forms.
-- Workflow: edit `index.html` → `commit my changes with a descriptive
-  message and push` → Netlify redeploys within ~30-60s.
-- **Do not deploy/push until the user explicitly says the site is ready** —
-  they want to review the whole build locally first, then deploy once. Still
-  commit each step's changes to git as you go, but confirm with the user
-  before the final push if they've said they want to hold off.
+- Netlify redeploys within ~30-60s of a push to `main`.
+
+### Deploy cadence — ONE deploy a day, 10:00 Dubai (set 5 Sep 2026)
+
+The user's instruction: **do not push to Netlify minute by minute. Update it
+once a day, at 10:00 a.m.** So `main` is now a release branch, not a working
+branch. Never push to `main` during a normal working session.
+
+Day-to-day work goes on `claude/manzil-phone-number-update-p110x3`. Pushing
+there is not only allowed, it is **required** — this container is ephemeral
+and a commit that is never pushed anywhere is lost when the session ends.
+Netlify only builds `main`, so pushes to the work branch cannot touch the
+live site. Commit and push there as often as you like.
+
+  edit index.html → commit → push to the work branch  (no deploy)
+  10:00 Dubai daily → merge work branch into main → push  (one deploy)
+
+The daily merge runs as a scheduled Routine at 06:00 UTC = 10:00 Gulf
+Standard Time (UTC+4; the UAE does not observe daylight saving, so this
+offset is fixed year-round). It merges only if the work branch is actually
+ahead of `main`, and does nothing on a quiet day.
+
+Exception: if the user explicitly asks for something live **now** ("push
+it", "deploy this"), do it immediately — a direct instruction beats the
+schedule. The cadence exists to stop *incidental* deploys, not to block the
+user from their own site.
 
 ## Build plan — work through one step at a time
 
@@ -250,5 +270,8 @@ actually needed.
 2. Ask the user to confirm which step to tackle if it's not obvious.
 3. Make the change directly in `index.html`.
 4. Update the checkbox above for the completed step.
-5. Commit locally. Only push to `main` if the user has said to, or if this
-   is a step they've explicitly asked to see live.
+5. Commit and push to the work branch
+   (`claude/manzil-phone-number-update-p110x3`) — never to `main`. `main`
+   is deployed once a day at 10:00 Dubai; see the deploy cadence section
+   above. Push to `main` mid-session only if the user explicitly asks to
+   see something live right now.

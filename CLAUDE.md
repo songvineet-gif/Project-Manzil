@@ -36,12 +36,23 @@ professional mortgage-advisory site, not their specific design.
 - Email: `info@manazil.com` — real, keep as-is unless told otherwise.
 - Phone / WhatsApp: real number confirmed by user — `+971 50 569 6741`
   (displayed formatted; wa.me/tel links use `971505696741`).
-- Legal entity: registered/legal name is **Manazil**, based in Dubai, UAE.
-  "Project Manzil" is kept as the on-site brand/trading name; footer states
-  "Project Manzil is a trading name of Manazil". User confirmed Manazil is a
-  licensed, independent mortgage broker registered with a UAE regulator (no
-  specific license number given — don't invent one, use generic "licensed
-  and registered" wording only).
+- Name: **Manzil Properties** everywhere on the site. The old "Project Manzil"
+  branding was renamed globally on 5 Sep 2026 at the user's instruction — do
+  not reintroduce it. Licensed, independent brokerage in Dubai, UAE; no
+  licence number was given, so use generic "licensed and registered" wording
+  and never invent one.
+  NOTE the three names in play, all legitimate and all different:
+    * Manzil Properties — the business name, used across the site
+    * manzil.dxb07     — the Instagram handle (logo wordmark reads MANZIL.DXB)
+    * manazil.com      — the email domain, info@manazil.com (spelt with an 'a')
+    * projectmanzil.netlify.app — the deploy URL, still the old name
+  Do not "correct" any of these into each other.
+- Brand assets in the repo: manzil-logo.png (full gold lockup as supplied),
+  manzil-mark.png (monogram cropped out with the black knocked to
+  transparency, used for the header/footer/USP mark), favicon-64/180/512.png
+  (mark on navy). Regenerate the mark with the canvas crop approach if the
+  source logo ever changes — there is no PIL or ImageMagick in this env, so
+  image work goes through headless Chromium canvas.
 - Business model: **free to the client** — Manazil earns commission from the
   bank on completed loans, not from the customer. Site copy should reflect
   this (hero trust bullet, contact section, footer, FAQ) rather than generic
@@ -173,6 +184,14 @@ the user confirms they're happy with the current one.
       edit an FAQ, regenerate the JSON-LD or Google will flag the mismatch.
       Deliberately no aggregateRating: no verifiable review count exists.
 
+- [x] Step 14: Bottom-up cleanup pass. Footer tagline promoted to a USP band
+      directly under the hero (research: credentials buried in a footer are
+      the classic mistake; first impressions form in ~50ms). Footer legal
+      disclosure contrast fixed — it measured 4.07:1, under the 4.5:1 AA
+      threshold, and it is the regulatory line so it must stay readable.
+      Rates line now says bank rates are updated weekly. Real Instagram icon
+      + handle pill replacing the old placeholder glyph. Form gained a
+      "Your details" heading and a friction-reducing subline.
 
 ## How to work each session
 

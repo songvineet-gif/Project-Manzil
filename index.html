@@ -1149,10 +1149,29 @@
             <input type="text" id="value" name="value" placeholder="e.g. AED 1,500,000">
           </div>
         </div>
+                <!-- Timeline is the single strongest buying-intent signal, and it is one tap.
+             Everything else the score uses is either already collected or inferred from
+             the calculator, so this is the only friction added. -->
         <div class="field">
+          <label for="buyTimeline">When are you looking to buy? <span class="hint">(so we know how fast to move)</span></label>
+          <select id="buyTimeline" name="timeline" required>
+            <option value="">Please choose…</option>
+            <option value="Within 1 month">Within 1 month</option>
+            <option value="1-3 months">1–3 months</option>
+            <option value="3-6 months">3–6 months</option>
+            <option value="Just researching for now">Just researching for now</option>
+          </select>
+        </div>
+        <div class="field">
+
           <label for="message">Anything else we should know? <span class="hint">(optional)</span></label>
           <textarea id="message" name="message" placeholder="Property location, timing, current mortgage status, etc."></textarea>
         </div>
+        <!-- Filled in by scoreLead() on submit. Netlify shows them in the notification
+             email, so the owner sees the priority without opening anything. -->
+        <input type="hidden" name="lead_score"          id="leadScore">
+        <input type="hidden" name="priority"            id="leadPriority">
+        <input type="hidden" name="qualification_notes" id="leadNotes">
         <button type="submit" class="btn btn-dark" style="width:100%;">Get My Free Loan Comparison</button>
         <div class="form-note">By submitting, you agree to be contacted by Manzil Properties about your inquiry.</div>
       </form>
@@ -1764,13 +1783,135 @@
     document.getElementById('impOther').textContent = '− AED ' + fmt(otherImpact);
     document.getElementById('impTotal').textContent = '− AED ' + fmt(cardImpact + carImpact + otherImpact);
   }
+  // Every calculator input starts at a default, so "has a value" proves nothing.
+  // These flags record that the visitor actually moved something, which is what
+  // makes their figures worth scoring on.
+  let CALC_TOUCHED = false, AFF_TOUCHED = false;
   ['calcPrice','calcDown','calcTerm','calcRate','calcBuyer','calcPropType',
    'affIncome','affCardLimit','affCarLoan','affOther'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updateCalc);
-    document.getElementById(id).addEventListener('change', updateCalc);
+    const el = document.getElementById(id);
+    const mark = () => { if (id.indexOf('aff') === 0) AFF_TOUCHED = true; else CALC_TOUCHED = true; };
+    el.addEventListener('input', () => { mark(); updateCalc(); });
+    el.addEventListener('change', () => { mark(); updateCalc(); });
   });
   document.getElementById('calcDown').addEventListener('input', function(){ this.dataset.touched = '1'; });
   updateCalc();
+
+  /* ---------------------------------------------------------------------------
+     Lead scoring.
+
+     Scores each enquiry 0-10 and writes the result into hidden fields, so the
+     notification email says which enquiries to call first instead of just
+     listing what was typed.
+
+     It scores PROPORTIONALLY over the signals actually present. Someone who
+     never opened the calculator is judged only on timeline, budget and how much
+     they wrote — not marked down for data they were never asked for. Bands
+     follow the usual convention: 8-10 call now, 5-7 book a call, under 5 nurture.
+
+     Every figure the score uses is stated in qualification_notes, so the owner
+     can disagree with it. A score nobody can check is a score nobody should act on.
+     --------------------------------------------------------------------------- */
+  function scoreLead(){
+    const signals = [];   // { label, earned, possible, note }
+    const val = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+
+    // -- Timeline: how soon they intend to buy. The strongest single predictor.
+    const TIMELINE_POINTS = {
+      'Within 1 month': 4, '1-3 months': 3, '3-6 months': 1.5, 'Just researching for now': 0
+    };
+    const timeline = val('buyTimeline');
+    if (timeline) {
+      signals.push({ label: 'Timeline', earned: TIMELINE_POINTS[timeline] ?? 0,
+                     possible: 4, note: timeline });
+    }
+
+    // -- Budget: a stated property value, sanity-checked. Optional field, so it varies.
+    const rawValue = val('value');
+    const digits = (rawValue.match(/\d/g) || []).join('');
+    const priceStated = digits ? parseInt(digits, 10) : 0;
+    if (rawValue.trim()) {
+      const ok = priceStated >= 300000;
+      signals.push({ label: 'Budget', earned: ok ? 1 : 0.5, possible: 1,
+                     note: ok ? 'AED ' + fmt(priceStated)
+                              : 'stated but unclear (' + rawValue.trim() + ')' });
+    }
+
+    // -- Effort: a considered message signals a real enquiry, not a tyre-kick.
+    const msg = val('message').trim();
+    signals.push({ label: 'Detail given', possible: 1,
+                   earned: msg.length >= 40 ? 1 : (msg.length > 0 ? 0.5 : 0),
+                   note: msg.length >= 40 ? 'described their situation'
+                        : msg.length > 0  ? 'brief note' : 'none' });
+
+    // -- Deposit readiness: their down payment against the CBUAE cap for their
+    //    own buyer type and property type. The most common reason a mortgage
+    //    stalls, so it carries real weight.
+    if (CALC_TOUCHED) {
+      const price   = parseFloat(val('calcPrice')) || 0;
+      const buyer   = val('calcBuyer');
+      const propType= val('calcPropType');
+      const downPct = parseFloat(val('calcDown')) || 0;
+      const minDown = 100 - maxLtvFor(buyer, propType, price);
+      // The slider will not go below the CBUAE minimum, so "meets the minimum" is
+      // nearly free and would flatter every calculator user. What actually varies,
+      // and what actually eases an approval, is equity ABOVE the minimum.
+      const gap = downPct - minDown;
+      const earned = gap >= 10 ? 2 : gap >= 0 ? 1.5 : 0;
+      signals.push({ label: 'Deposit', earned: earned, possible: 2,
+        note: downPct + '% against ' + minDown + '% required' +
+              (gap >= 10 ? ' — well above the minimum'
+             : gap >= 0  ? ' — meets the minimum'
+             : ' — short by ' + Math.abs(gap).toFixed(0) + ' points') });
+    }
+
+    // -- Affordability: what the banks would actually lend them, against what
+    //    the purchase needs. Uses the figures already on screen.
+    if (AFF_TOUCHED) {
+      const maxLoanTxt = (document.getElementById('affMaxLoan') || {}).textContent || '0';
+      const maxLoan = parseInt((maxLoanTxt.match(/\d/g) || ['0']).join(''), 10);
+      const price   = parseFloat(val('calcPrice')) || 0;
+      const downPct = parseFloat(val('calcDown')) || 0;
+      const needed  = price * (1 - downPct / 100);
+      let earned = 0, note;
+      if (needed <= 0)             { earned = 1; note = 'no loan figure to compare'; }
+      else if (maxLoan >= needed)  { earned = 2; note = 'borrows AED ' + fmt(maxLoan) + ', needs AED ' + fmt(needed) + ' — comfortable'; }
+      else if (maxLoan >= needed*0.8){ earned = 1; note = 'borrows AED ' + fmt(maxLoan) + ', needs AED ' + fmt(needed) + ' — close, worth a conversation'; }
+      else                         { earned = 0; note = 'borrows AED ' + fmt(maxLoan) + ', needs AED ' + fmt(needed) + ' — short'; }
+      signals.push({ label: 'Affordability', earned: earned, possible: 2, note: note });
+    }
+
+    const earned   = signals.reduce((s, x) => s + x.earned, 0);
+    const possible = signals.reduce((s, x) => s + x.possible, 0);
+    const score = possible > 0 ? Math.round((earned / possible) * 10) : 0;
+
+    const priority = score >= 8 ? 'HIGH — call today'
+                   : score >= 5 ? 'MEDIUM — book a call'
+                   : 'LOW — add to follow-up';
+
+    const notes = signals.map(s =>
+      s.label + ': ' + s.note + ' (' + s.earned + '/' + s.possible + ')').join('\n')
+      + (CALC_TOUCHED || AFF_TOUCHED ? '' : '\nCalculator not used — scored on the enquiry alone.');
+
+    return { score: score, priority: priority, notes: notes };
+  }
+
+  (function attachScoring(){
+    const form = document.querySelector('form[name="loan-inquiry"]');
+    if (!form) return;
+    form.addEventListener('submit', function(){
+      // A scoring bug must never cost a lead: if anything throws, the enquiry
+      // still submits, just without the score.
+      try {
+        const r = scoreLead();
+        document.getElementById('leadScore').value    = r.score + '/10';
+        document.getElementById('leadPriority').value = r.priority;
+        document.getElementById('leadNotes').value    = r.notes;
+      } catch (e) {
+        document.getElementById('leadNotes').value = 'Scoring unavailable: ' + e.message;
+      }
+    });
+  })();
 </script>
 
 </body>

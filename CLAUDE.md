@@ -213,6 +213,32 @@ the user confirms they're happy with the current one.
       + handle pill replacing the old placeholder glyph. Form gained a
       "Your details" heading and a friction-reducing subline.
 
+- [x] Step 15: Lead scoring. Every enquiry is scored 0-10 in the browser on
+      submit and written into three hidden fields (`lead_score`, `priority`,
+      `qualification_notes`), so the Netlify notification email says which
+      enquiries to ring first. Bands: 8-10 call today, 5-7 book a call, under
+      5 follow up. Added ONE visible field (`When are you looking to buy?`) —
+      timeline is the strongest intent signal and everything else is either
+      already collected or read off the calculator.
+      Design decisions worth keeping:
+        * Scores PROPORTIONALLY over the signals present (earned/possible x 10),
+          so someone who never opened the calculator is judged on timeline,
+          budget and detail alone rather than punished for missing data.
+        * The deposit signal measures equity ABOVE the CBUAE minimum, not
+          "meets the minimum" — the slider clamps to the minimum, so the
+          latter would have scored 3/3 for every calculator user and told
+          the owner nothing.
+        * CALC_TOUCHED / AFF_TOUCHED flags exist because every calculator
+          input has a default; "has a value" does not mean "was used".
+        * qualification_notes states every figure the score used. A score the
+          owner cannot check is a score they should not act on.
+        * scoreLead() is wrapped in try/catch at the submit handler — a
+          scoring bug must never cost a lead.
+      Gotcha already hit: `id="timeline"` collides with the journey
+      `<section id="timeline">`. The field's id is `buyTimeline`; its form
+      name is still `timeline`. Keep ids unique or getElementById silently
+      returns the section.
+
 ## Lead capture — how it works
 
 The contact form is a Netlify Form named `loan-inquiry`. Form detection was
@@ -239,7 +265,24 @@ as CSV, which opens directly in Excel.
 
 Submitting redirects to `thank-you.html`.
 
-### Email on submit
+Hidden fields added by Step 15 also arrive in the email: `lead_score`,
+`priority` and `qualification_notes`.
+
+### Email on submit — DONE (8 Sep 2026)
+
+The owner enabled it. Note the path: it is NOT on the form page. It is
+Project configuration -> Notifications -> **Form submission notifications**
+(the *Deploy* notifications section on the same page is Pro-only and is a
+different feature — do not confuse them).
+
+Verified end to end on 8 Sep 2026 with two test submissions: both emails
+arrived in the inbox (not spam), Reply-to is set to the lead's own address,
+and the test rows were deleted afterwards. Alerts go to
+`manzil.dxb07@gmail.com`, NOT `info@manazil.com` — the site still advertises
+info@manazil.com, so check that inbox is actually monitored.
+
+Netlify's default subject is unhelpful ("Provide your request"); suggested
+setting a custom subject on the notification.
 
 Netlify sends the email itself — no code, no third-party mail service, no
 API key. It is a per-form setting in the dashboard, and the Netlify MCP

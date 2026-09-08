@@ -264,6 +264,28 @@ That adds a third-party account and a credential to look after, so it is
 not worth it just to receive leads — only if templated/branded mail is
 actually needed.
 
+## Cloudflare copy — live since 5 Sep 2026
+
+  https://spring-snowflake-2921.song-vineet.workers.dev/
+
+A Workers static-assets deploy (NOT Pages — the user went through the new
+"Upload your static files" flow, so the project got the auto-generated name
+`spring-snowflake-2921` and a `.workers.dev` address, not `.pages.dev`).
+Uploaded by hand from a zip, so it does NOT auto-update on push — it is a
+snapshot. Re-upload to refresh it, or connect the GitHub repo later.
+
+Verified working: all pages, three.js, images, robots, sitemap. Cloudflare
+serves clean URLs, so /privacy.html 307-redirects to /privacy and renders —
+that is normal, not a fault.
+
+**The enquiry form does NOT capture on this address.** `data-netlify` is
+Netlify-only; a submission here goes nowhere silently. Do not give this link
+to clients as a lead-capture site until the form is moved to something
+host-independent. Netlify remains the address that actually collects leads.
+
+Canonical + sitemap still point at the Netlify URL, which is deliberate: it
+stops Google indexing this copy as a duplicate.
+
 ## Preview artifact — how the user reviews work (set 5 Sep 2026)
 
 Netlify free credits ran out on 5 Sep 2026, so `main` cannot publish until they

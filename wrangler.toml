@@ -1,0 +1,16 @@
+# Cloudflare Workers config — lets Cloudflare rebuild the site itself on every
+# push to `main`, instead of the site being a hand-uploaded snapshot.
+#
+# `name` MUST match the Worker name in the Cloudflare dashboard or the build is
+# rejected. The dashboard auto-generated "spring-snowflake-2921" when the site
+# was first uploaded, and the live URL is built from it, so renaming means
+# changing both places together and taking a new URL.
+name = "spring-snowflake-2921"
+compatibility_date = "2026-09-05"
+
+# Publish dist/, never the repo root. tools/cf-build.sh assembles dist/ from an
+# explicit allowlist of the 12 site files. Pointing this at "./" would publish
+# .git along with everything else — .assetsignore was tested and does not
+# filter. Build command in the Cloudflare dashboard: bash ./tools/cf-build.sh
+[assets]
+directory = "./dist"

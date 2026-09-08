@@ -286,6 +286,31 @@ host-independent. Netlify remains the address that actually collects leads.
 Canonical + sitemap still point at the Netlify URL, which is deliberate: it
 stops Google indexing this copy as a duplicate.
 
+### Making Cloudflare auto-deploy (config is in the repo, one dashboard step left)
+
+`wrangler.toml` + `tools/cf-build.sh` are committed and ready. Once the user
+connects the repo in the dashboard, Cloudflare rebuilds on every push to `main`
+— so it lands on the same once-a-day cadence as Netlify, with no zip uploads.
+
+The dashboard step (Workers & Pages -> spring-snowflake-2921 -> Settings ->
+Builds -> Connect):
+    repository     songvineet-gif/Project-Manzil
+    branch         main
+    build command  bash ./tools/cf-build.sh
+    deploy command npx wrangler deploy
+
+NEVER set `[assets] directory = "./"`. It was tested: `.assetsignore` does NOT
+filter (331 files read without it, 332 with), so the repo root publishes `.git`
+— the whole repository history, publicly downloadable. cf-build.sh copies an
+explicit allowlist of the 12 site files into dist/ instead, and wrangler is
+pointed at dist/. Adding a new image or page to the site means adding it to
+SITE_FILES in that script, or it will 404 on Cloudflare while working on
+Netlify.
+
+The Worker name in wrangler.toml must equal the dashboard name or the build is
+rejected. It is `spring-snowflake-2921` (auto-generated); renaming means
+changing both together and taking a new URL.
+
 ## Preview artifact — how the user reviews work (set 5 Sep 2026)
 
 Netlify free credits ran out on 5 Sep 2026, so `main` cannot publish until they

@@ -264,6 +264,44 @@ That adds a third-party account and a credential to look after, so it is
 not worth it just to receive leads — only if templated/branded mail is
 actually needed.
 
+## Preview artifact — how the user reviews work (set 5 Sep 2026)
+
+Netlify free credits ran out on 5 Sep 2026, so `main` cannot publish until they
+reset (team created 28 Aug; check Netlify -> Billing). The live site stays up and
+the form still captures leads; only *new deploys* are blocked.
+
+So the user reviews work on a Claude Artifact preview instead:
+
+  https://claude.ai/code/artifact/ef335388-bbb7-4af7-a468-b245b72a069d
+
+Rebuild and republish it with:
+
+  python3 tools/build_preview.py     # writes manzil-preview.html
+  # then Artifact tool, same file path -> same URL
+
+It is generated FROM index.html, so it never drifts. The transformations are:
+  * <!DOCTYPE>/<html>/<head>/<body> stripped (artifacts supply their own)
+  * manzil-mark.png inlined as a data URI (artifacts cannot fetch repo files)
+  * three.min.js loaded from cdnjs r128 instead of the vendored copy
+    (cdnjs is on the artifact CSP allowlist; the local file is not reachable)
+  * privacy.html / terms.html point at the live Netlify copies
+  * the form is prevented from submitting and says so in place, rather than
+    POSTing to a thank-you page that does not exist in an artifact
+
+Do NOT hand-edit the preview file — edit index.html and regenerate, or the two
+fall out of sync.
+
+Hosting decisions already made and researched, so they need not be re-litigated:
+  * Vercel was rejected: its free Hobby plan forbids commercial use, so a
+    lead-generating brokerage site would need Pro (~$20/mo, more than Netlify Pro).
+  * Cloudflare Pages is the chosen alternative if they move: free, commercial use
+    explicitly allowed, unlimited bandwidth, 500 builds/month. Setup was started
+    but the user got stuck on the dashboard; the site zip and the click-through
+    steps are in the transcript. Cloudflare's MCP connector CANNOT deploy - it
+    only exposes KV/R2/D1/Hyperdrive plus read-only Workers.
+  * A second Netlify account under another name was declined - it circumvents
+    the usage limit and risks both accounts.
+
 ## How to work each session
 
 1. Read this file's checklist to see what's next.

@@ -1,6 +1,12 @@
-"""Turn Netlify form submissions into a formatted Excel workbook.
+"""Turn Supabase `leads` rows into a formatted Excel workbook.
 
 Usage: python3 to_excel.py subs.json "Manzil Properties - Enquiries.xlsx"
+
+subs.json is the JSON array returned by querying the `leads` table
+(e.g. `select * from leads order by created_at desc;` via the Supabase
+MCP connector), with rows shaped like:
+  {"id": ..., "created_at": ..., "name": ..., "phone": ..., "email": ...,
+   "property_value": ..., "message": ...}
 """
 import json, sys, datetime
 from openpyxl import Workbook
@@ -55,19 +61,13 @@ for i, (title, width) in enumerate(COLUMNS, start=1):
     ws.column_dimensions[get_column_letter(i)].width = width
 ws.row_dimensions[HEADER_ROW].height = 22
 
-def field(sub, key):
-    for f in sub.get('ordered_human_fields', []):
-        if f.get('name') == key:
-            return f.get('value') or ''
-    return (sub.get('data') or {}).get(key, '') or ''
-
 # Newest first — the row you care about is the one that just came in
 subs_sorted = sorted(subs, key=lambda s: s.get('created_at') or '', reverse=True)
 
 for r, sub in enumerate(subs_sorted, start=HEADER_ROW + 1):
     ts = (sub.get('created_at') or '').replace('T', ' ').replace('Z', '')[:16]
-    row = [r - HEADER_ROW, ts, field(sub, 'name'), field(sub, 'phone'),
-           field(sub, 'email'), field(sub, 'value'), field(sub, 'message')]
+    row = [r - HEADER_ROW, ts, sub.get('name') or '', sub.get('phone') or '',
+           sub.get('email') or '', sub.get('property_value') or '', sub.get('message') or '']
     for i, val in enumerate(row, start=1):
         c = ws.cell(row=r, column=i, value=val)
         c.alignment = Alignment(vertical='top', wrap_text=(i == 7))

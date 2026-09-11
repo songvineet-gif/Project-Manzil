@@ -1117,11 +1117,12 @@
     </div>
 
     <div class="form-card">
-      <!-- Netlify Forms: once this file is deployed on Netlify, submissions appear automatically
-           under Site → Forms in your Netlify dashboard. No backend needed. -->
-      <form name="loan-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
-        <input type="hidden" name="form-name" value="loan-inquiry" />
-        <p style="display:none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <!-- Leads are stored directly in Supabase (table: leads) via the anon
+           publishable key + an insert-only RLS policy — see initLeadForm() below.
+           No backend/server needed; the key is safe to expose client-side because
+           RLS only grants INSERT, never SELECT/UPDATE/DELETE, to the anon role. -->
+      <form name="loan-inquiry" id="loanInquiryForm">
+        <p style="display:none;"><label>Don't fill this out: <input name="bot-field" id="botField"></label></p>
         <!-- The fields previously began with no heading at all. A heading sets the
              expectation and the line under it removes the main hesitation — people
              assume a mortgage enquiry means paperwork. -->
@@ -1153,7 +1154,8 @@
           <label for="message">Anything else we should know? <span class="hint">(optional)</span></label>
           <textarea id="message" name="message" placeholder="Property location, timing, current mortgage status, etc."></textarea>
         </div>
-        <button type="submit" class="btn btn-dark" style="width:100%;">Get My Free Loan Comparison</button>
+        <button type="submit" class="btn btn-dark" style="width:100%;" id="loanInquirySubmit">Get My Free Loan Comparison</button>
+        <div class="form-note" id="loanInquiryError" style="display:none; color:#b3261e;"></div>
         <div class="form-note">By submitting, you agree to be contacted by Manzil Properties about your inquiry.</div>
       </form>
     </div>
@@ -1210,6 +1212,7 @@
   </div>
 </footer>
 
+<script src="supabase.min.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
   const toggle = document.getElementById('menuToggle');
@@ -1222,6 +1225,57 @@
     links.classList.remove('open');
     document.body.classList.remove('menu-open');
   }));
+
+  /* ---- Lead form -> Supabase ---------------------------------------------
+     Writes straight to the `leads` table using the anon publishable key.
+     Safe to expose client-side: RLS on that table grants INSERT only to the
+     anon role, no SELECT/UPDATE/DELETE, so this key can never read back or
+     alter existing leads — only add new ones. Submissions are viewed in the
+     Supabase dashboard's Table Editor, not emailed automatically (unlike the
+     old Netlify Forms setup) — see CLAUDE.md if that gap needs closing. */
+  (function initLeadForm(){
+    const form = document.getElementById('loanInquiryForm');
+    if (!form) return;
+    const submitBtn = document.getElementById('loanInquirySubmit');
+    const errorBox = document.getElementById('loanInquiryError');
+    const SUPABASE_URL = 'https://kndumdijrlpxuuduydkz.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_Sm-mgyiVY6OKuUky4EL5NQ_9adoi6OD';
+    if (typeof supabase === 'undefined') return; // library failed to load: fall back to no-op, avoid a dead form throwing errors
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      errorBox.style.display = 'none';
+
+      // Honeypot: bots fill every field including this hidden one. Pretend
+      // success and bail rather than telling them what tripped it.
+      if (document.getElementById('botField').value) {
+        window.location.href = 'thank-you.html';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      const { error } = await sb.from('leads').insert({
+        name: form.name.value.trim(),
+        phone: form.phone.value.trim(),
+        email: form.email.value.trim(),
+        property_value: form.value.value.trim(),
+        message: form.message.value.trim()
+      });
+
+      if (error) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Get My Free Loan Comparison';
+        errorBox.textContent = "Something went wrong sending your details. Please try again, or WhatsApp us directly on +971 50 569 6741.";
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      window.location.href = 'thank-you.html';
+    });
+  })();
 
   /* ---- Dubai skyline -----------------------------------------------------
      A procedural night skyline behind the hero, with the Burj Khalifa's tiered,

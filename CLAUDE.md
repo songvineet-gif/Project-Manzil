@@ -195,54 +195,57 @@ the user confirms they're happy with the current one.
 
 ## Lead capture — how it works
 
-The contact form is a Netlify Form named `loan-inquiry`. Form detection was
-OFF until 5 Sep 2026, so nothing submitted before then was ever stored — the
-markup had `data-netlify` but the project setting was disabled, and Netlify
-only registers a form when it is enabled AND a deploy runs afterwards. It is
-now enabled and verified with a real test submission.
+**As of 11 Sep 2026, leads are stored in Supabase, not Netlify Forms.**
+Netlify Forms had no email notification wired up and only exposed a
+CSV/dashboard export; Supabase gives a real, queryable table Claude can pull
+from directly. The old `submissions_to_excel.py` / Netlify-Forms workflow
+below is now historical — do not reintroduce `data-netlify` on this form.
 
-Fields captured: name, phone, email, value, message (plus a `bot-field`
-honeypot, which is why spam protection shows as active).
+- Supabase project: **Project Manzil supabase** (`kndumdijrlpxuuduydkz`,
+  org `Manzil properties`, region ap-northeast-1).
+- Table: `public.leads` — columns `id`, `created_at`, `name`, `phone`,
+  `email`, `property_value`, `message`.
+- RLS is **insert-only for the anon role** (policy "Public can submit
+  leads") — no SELECT/UPDATE/DELETE policy exists for anon, so the
+  publishable key embedded in `index.html` can add rows but never read or
+  change existing ones. Reads happen through the Supabase dashboard/MCP
+  connector, which use elevated access, not the public key.
+- The form (`#loanInquiryForm` in `index.html`) submits via `supabase-js`
+  (vendored locally as `supabase.min.js`, same pattern as `three.min.js` —
+  no CDN dependency) in the `initLeadForm()` IIFE near the bottom of the
+  inline `<script>` block. It does a client-side `sb.from('leads').insert(...)`,
+  then redirects to `thank-you.html` on success. The `bot-field` honeypot
+  check is now done in that same JS (Netlify no longer provides spam
+  filtering for this form).
+- Fields captured: name, phone, email, property_value (labelled "estimated
+  property value" on the form), message.
 
-Submissions land in Netlify → Site → Forms. They are NOT in this repo and
-Claude cannot collect them in the background — Claude only runs during a
-session. The workflow when the user asks for the list:
+Workflow when the user asks for the list of leads:
 
-  1. Netlify connector → `manage-form-submissions` / `get-submissions`
+  1. `mcp__Supabase__execute_sql` on project `kndumdijrlpxuuduydkz`:
+     `select * from leads order by created_at desc;`
   2. Save that JSON to a file
   3. `python3 tools/submissions_to_excel.py subs.json "Manzil Properties - Enquiries.xlsx"`
-     (needs openpyxl: `pip install openpyxl` — not preinstalled in this env)
+     (needs openpyxl: `pip install openpyxl` — not preinstalled in this env;
+     the script was updated on 11 Sep 2026 to read flat Supabase rows
+     instead of Netlify's nested submission format)
   4. Send the .xlsx with SendUserFile
 
-The user can also self-serve any time: Netlify dashboard → Forms → Download
-as CSV, which opens directly in Excel.
+The user can also self-serve any time: Supabase dashboard → project
+**Project Manzil supabase** → Table Editor → `leads`, which has an "Export
+to CSV" option that opens directly in Excel.
 
 Submitting redirects to `thank-you.html`.
 
-### Email on submit
+### Email on submit — currently off
 
-Netlify sends the email itself — no code, no third-party mail service, no
-API key. It is a per-form setting in the dashboard, and the Netlify MCP
-connector does **not** expose it (its only write operations are
-update-visitor-access-controls, update-forms, manage-form-submissions,
-update-project-name, manage-env-vars, create-new-project). So Claude cannot
-switch it on; the owner has to click it once:
-
-  Netlify → project `projectmanzil` → **Forms** → form `loan-inquiry` →
-  **Settings & usage** → **Form notifications** → **Add notification** →
-  **Email notification** → Email to notify: `info@manazil.com` → Save.
-
-Direct link: https://app.netlify.com/projects/projectmanzil/forms
-
-Multiple recipients = add one notification per address. Every submission
-then arrives as an email containing all five fields.
-
-If a properly branded email is ever wanted instead of Netlify's plain one,
-the alternative is a `submission-created` Netlify Function calling a mail
-provider (Resend/SendGrid) with the API key stored via `manage-env-vars`.
-That adds a third-party account and a credential to look after, so it is
-not worth it just to receive leads — only if templated/branded mail is
-actually needed.
+Unlike Netlify's old per-form notification toggle, Supabase does not email
+on insert out of the box. Closing this gap means a Postgres trigger/webhook
+(or Supabase Edge Function) calling a mail provider (Resend/SendGrid) with
+the API key stored as a Supabase secret. That's a third-party account and a
+credential to look after — worth doing once the user wants leads pushed to
+their inbox again, but not implemented yet. Until then, check the `leads`
+table directly (via the workflow above) rather than expecting an email.
 
 ## How to work each session
 
